@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: proto/nif.proto
 
-package nif_tools
+package proto
 
 import (
 	context "context"
@@ -35,7 +35,7 @@ func NewNifApiClient(cc grpc.ClientConnInterface) NifApiClient {
 
 func (c *nifApiClient) GetControlDigit(ctx context.Context, in *ControlDigitRequest, opts ...grpc.CallOption) (*ControlDigitResponse, error) {
 	out := new(ControlDigitResponse)
-	err := c.cc.Invoke(ctx, "/main.NifApi/GetControlDigit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GetControlDigit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/main.NifApi/GetControlDigit",
+		FullMethod: "/proto.NifApi/GetControlDigit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NifApiServer).GetControlDigit(ctx, req.(*ControlDigitRequest))
@@ -92,7 +92,7 @@ func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NifApi_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "main.NifApi",
+	ServiceName: "proto.NifApi",
 	HandlerType: (*NifApiServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
