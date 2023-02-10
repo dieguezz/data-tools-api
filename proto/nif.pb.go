@@ -20,6 +20,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type UnimplementedGreeterServer struct {
+}
+
 type ControlDigitRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

@@ -1,9 +1,8 @@
 syntax = "proto3";
 
-option go_package=".";
+option go_package="github.com/dieguezz/nif-tools/protopb";
 
 package proto;
-
 
 service NifApi {
     rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse);

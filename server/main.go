@@ -12,7 +12,7 @@ type server struct {
 	pb.UnimplementedGreeterServer
 }
 
-func (s *server) GetControlDigit(ctx context.Context, in *pb.ControlDigitRequest) (*pb.ControlDigitRequest, error) {
+func (s *server) GetControlDigit(ctx context.Context, in *pb.ControlDigitRequest) (*pb.ControlDigitResponse, error) {
 	return &pb.ControlDigitResponse{}, nil
 }
 
