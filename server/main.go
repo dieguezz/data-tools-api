@@ -24,7 +24,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 	pb.RegisterNifApiServer(grpcServer, &server{})
 
-	if err := grpcServer.Serve(lis); ett != nil {
+	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve gRPC server over port 9000: %v", err)
 	}
 }
