@@ -4,8 +4,14 @@ option go_package="github.com/dieguezz/nif-tools/protopb";
 
 package proto;
 
+import "google/api/annotations.proto";
+
 service NifApi {
-    rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse);
+    rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse) {
+        option (google.api.http) = {
+            get: "/getcontroldigit/{nif}"
+        };
+    };
 }
 
 message ControlDigitRequest {
@@ -13,5 +19,5 @@ message ControlDigitRequest {
 }
 
 message ControlDigitResponse {
-    string controlDigit = 1;
+    string control_digit = 1;
 }
