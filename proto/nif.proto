@@ -2,14 +2,14 @@ syntax = "proto3";
 
 package main;
 
-option go_package = './proto';
+option go_package="github.com/dieguezz/nif-tools";
 
 service NifApi {
-    rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse)
+    rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse);
 }
 
 message ControlDigitRequest {
-    int nif = 1;
+    int32 nif = 1;
 }
 
 message ControlDigitResponse {
