@@ -1,7 +1,7 @@
 package main
 
 import (
-	"control-digit/controldigit"
+	"github.com/dieguezz/nif-tools/control-digit"
 )
 
 func main() {
