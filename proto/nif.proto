@@ -1,0 +1,15 @@
+syntax = "proto3"
+
+package main
+
+service NifApi {
+    rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse)
+}
+
+message ControlDigitRequest {
+    int nif = 1;
+}
+
+message ControlDigitResponse {
+    string controlDigit = 1;
+}
