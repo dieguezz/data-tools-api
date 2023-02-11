@@ -3,6 +3,7 @@ package controldigit
 import (
 	"strconv"
 	"testing"
+	"reflect"
 )
 
 // TestGetIsNIE calls controldigit.GetIsNIE with a string, checking for a valid return value
@@ -46,4 +47,36 @@ func TestIsValidNIF(t *testing.T) {
 		}
 	}
 
+}
+
+type nif struct {
+	number int
+	control string
+}
+
+func TestGetControlDigit(t *testing.T) {
+	nifList := []nif{nif{number: 41509090, control: "R" }, nif{number: 40758223, control: "S"}, nif{number: 37909898, control: "X"}, nif{number: 74255828, control: "Y"}}
+
+	for _, x := range nifList {
+		result := GetControlDigit(x.number)
+
+		if result != x.control {
+			t.Fatal("Failed testing" )
+		}
+	}
+}
+
+type nifCandidate struct {
+	nif string
+	expected parsedNIF
+}
+func TestGetParsedNIF(t *testing.T) {
+	items := []nifCandidate{nifCandidate{nif: "74255828Y", expected: parsedNIF{ number: 74255828, kind: "NIF", control: "Y"}}}
+		
+	for _, x := range items {
+		result := GetParsedNIF(x.nif)
+		if !reflect.DeepEqual(x.expected, result) {
+			t.Fatal("Failed testing" )
+		}
+	}
 }
