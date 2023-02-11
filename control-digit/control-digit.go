@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-type parsedNIF struct {
-	number  int
-	kind    string
-	control string
+type ParsedNIF struct {
+	Number  int
+	Kind    string
+	Control string
 }
 
 func IsValidNIF(str string) bool {
@@ -30,8 +30,8 @@ func IsValidNIE(str string) bool {
 	return DNIRegex.MatchString(str)
 }
 
-func GetParsedNIF(str string) parsedNIF {
-	nif := parsedNIF{}
+func GetParsedNIF(str string) ParsedNIF {
+	nif := ParsedNIF{}
 	var parsedString string
 	if IsValidNIF(str) {
 		lastChar := string(str[len(str)-1])
@@ -39,16 +39,16 @@ func GetParsedNIF(str string) parsedNIF {
 		_, isControl := strconv.Atoi(lastChar)
 
 		if isControl != nil {
-			nif.control = strings.ToUpper(lastChar)
+			nif.Control = strings.ToUpper(lastChar)
 			parsedString = strings.Replace(str, lastChar, "", 2)
 		}
 		_, isKind := strconv.Atoi(firstChar)
 
 		if isKind != nil {
-			nif.kind = fmt.Sprintf("NIF%s", strings.ToUpper(firstChar))
+			nif.Kind = fmt.Sprintf("NIF%s", strings.ToUpper(firstChar))
 			parsedString = strings.Replace(parsedString, firstChar, "", 2)
 		} else {
-			nif.kind = "NIF"
+			nif.Kind = "NIF"
 		}
 
 		number, err := strconv.Atoi(parsedString)
@@ -57,21 +57,21 @@ func GetParsedNIF(str string) parsedNIF {
 			log.Fatalf("There was an error parsing %v", nil)
 		}
 
-		nif.number = number
-		nif.control = GetControlDigit(number)
-	
+		nif.Number = number
+		nif.Control = GetControlDigit(int32(number))
+
 		return nif
 
 	} else if IsValidNIE(str) {
 		lastChar := string(str[len(str)-1])
 		firstChar := string(str[0:1])
 		
-		nif.kind = fmt.Sprintf("NIE%s", strings.ToUpper(firstChar))
+		nif.Kind = fmt.Sprintf("NIE%s", strings.ToUpper(firstChar))
 		
 		_, isControl := strconv.Atoi(lastChar)
 
 		if isControl != nil {
-			nif.control = lastChar
+			nif.Control = lastChar
 			parsedString = strings.Replace(parsedString, firstChar, "", 2)
 			parsedString = strings.Replace(parsedString, lastChar, "", 2)
 
@@ -81,7 +81,7 @@ func GetParsedNIF(str string) parsedNIF {
 				log.Fatalf("There was an error parsing string with value %v", nil)
 			}
 
-			nif.number = number
+			nif.Number = number
 
 			return nif
 		}
@@ -93,8 +93,8 @@ func GetParsedNIF(str string) parsedNIF {
 			log.Fatalf("There was an error parsing %s with error %v", parsedString, nil)
 		}
 	
-		nif.number = number
-		nif.control = GetControlDigit(nif.number)
+		nif.Number = number
+		nif.Control = GetControlDigit(int32(nif.Number))
 		return nif
 
 	}
@@ -102,9 +102,9 @@ func GetParsedNIF(str string) parsedNIF {
 	return nif
 }
 
-func GetControlDigit(num int) string {
+func GetControlDigit(num int32) string {
 
-	remainder := map[int]string{0: "T", 1: "R", 2: "W", 3: "A", 4: "G", 5: "M", 6: "Y", 7: "F", 8: "P", 9: "D", 10: "X", 11: "B", 12: "N", 13: "J", 14: "Z", 15: "S", 16: "Q", 17: "V", 18: "H", 19: "L", 20: "C", 21: "K", 22: "E"}
+	remainder := map[int32]string{0: "T", 1: "R", 2: "W", 3: "A", 4: "G", 5: "M", 6: "Y", 7: "F", 8: "P", 9: "D", 10: "X", 11: "B", 12: "N", 13: "J", 14: "Z", 15: "S", 16: "Q", 17: "V", 18: "H", 19: "L", 20: "C", 21: "K", 22: "E"}
 	return remainder[num % 23]
 	
 

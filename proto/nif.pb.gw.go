@@ -47,7 +47,7 @@ func request_NifApi_GetControlDigit_0(ctx context.Context, marshaler runtime.Mar
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "nif")
 	}
 
-	protoReq.Nif, err = runtime.Int32(val)
+	protoReq.Nif, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nif", err)
 	}
@@ -73,7 +73,7 @@ func local_request_NifApi_GetControlDigit_0(ctx context.Context, marshaler runti
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "nif")
 	}
 
-	protoReq.Nif, err = runtime.Int32(val)
+	protoReq.Nif, err = runtime.String(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nif", err)
 	}
@@ -97,7 +97,7 @@ func RegisterNifApiHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.NifApi/GetControlDigit", runtime.WithHTTPPathPattern("/getcontroldigit/{nif}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.NifApi/GetControlDigit", runtime.WithHTTPPathPattern("/controldigit/{nif}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -161,7 +161,7 @@ func RegisterNifApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.NifApi/GetControlDigit", runtime.WithHTTPPathPattern("/getcontroldigit/{nif}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.NifApi/GetControlDigit", runtime.WithHTTPPathPattern("/controldigit/{nif}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -181,7 +181,7 @@ func RegisterNifApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 }
 
 var (
-	pattern_NifApi_GetControlDigit_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"getcontroldigit", "nif"}, ""))
+	pattern_NifApi_GetControlDigit_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"controldigit", "nif"}, ""))
 )
 
 var (

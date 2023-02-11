@@ -9,13 +9,13 @@ import "google/api/annotations.proto";
 service NifApi {
     rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse) {
         option (google.api.http) = {
-            get: "/getcontroldigit/{nif}"
+            get: "/controldigit/{nif}"
         };
     };
 }
 
 message ControlDigitRequest {
-    int32 nif = 1;
+    string nif = 1;
 }
 
 message ControlDigitResponse {

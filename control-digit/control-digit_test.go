@@ -58,7 +58,7 @@ func TestGetControlDigit(t *testing.T) {
 	nifList := []nif{nif{number: 41509090, control: "R" }, nif{number: 40758223, control: "S"}, nif{number: 37909898, control: "X"}, nif{number: 74255828, control: "Y"}}
 
 	for _, x := range nifList {
-		result := GetControlDigit(x.number)
+		result := GetControlDigit(int32(x.number))
 
 		if result != x.control {
 			t.Fatal("Failed testing" )
@@ -68,10 +68,11 @@ func TestGetControlDigit(t *testing.T) {
 
 type nifCandidate struct {
 	nif string
-	expected parsedNIF
+	expected ParsedNIF
 }
+
 func TestGetParsedNIF(t *testing.T) {
-	items := []nifCandidate{nifCandidate{nif: "74255828Y", expected: parsedNIF{ number: 74255828, kind: "NIF", control: "Y"}}}
+	items := []nifCandidate{nifCandidate{nif: "74255828Y", expected: ParsedNIF{ Number: 74255828, Kind: "NIF", Control: "Y"}},nifCandidate{nif: "74255828Y", expected: ParsedNIF{ Number: 74255828, Kind: "NIF", Control: "Y"}}}
 		
 	for _, x := range items {
 		result := GetParsedNIF(x.nif)
