@@ -1,4 +1,4 @@
-package controldigit
+package nifcontroldigit
 
 import (
 	"testing"
