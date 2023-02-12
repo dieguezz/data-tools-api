@@ -6,7 +6,8 @@ import (
 	"net"
 	"net/http"
 
-	controldigit "github.com/dieguezz/nif-tools/control-digit"
+	nifparser "github.com/dieguezz/nif-tools/parser"
+
 	pb "github.com/dieguezz/nif-tools/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -17,7 +18,7 @@ type server struct {
 }
 
 func (s *server) GetControlDigit(ctx context.Context, in *pb.ControlDigitRequest) (*pb.ControlDigitResponse, error) {
-	nif, err := controldigit.GetParsedNIF(in.GetNif())
+	nif, err := nifparser.GetParsedNIF(in.GetNif())
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
 }
 
