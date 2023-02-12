@@ -22,6 +22,11 @@ func (s *server) GetControlDigit(ctx context.Context, in *pb.ControlDigitRequest
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
 }
 
+func (s *server) GetType(ctx context.Context, in *pb.TypeRequest) (*pb.TypeResponse, error) {
+	nif, err := nifparser.GetParsedNIF(in.GetNif())
+	return &pb.TypeResponse{Type: nif.Kind}, err
+}
+
 func (s *server) GetParsedNIF(ctx context.Context, in *pb.ParsedNIFRequest) (*pb.ParsedNIFResponse, error) {
 	nif, err := nifparser.GetParsedNIF(in.GetNif())
 	return &pb.ParsedNIFResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err

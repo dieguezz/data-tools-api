@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NifApiClient interface {
 	GetControlDigit(ctx context.Context, in *ControlDigitRequest, opts ...grpc.CallOption) (*ControlDigitResponse, error)
+	GetType(ctx context.Context, in *TypeRequest, opts ...grpc.CallOption) (*TypeResponse, error)
 	GetParsedNIF(ctx context.Context, in *ParsedNIFRequest, opts ...grpc.CallOption) (*ParsedNIFResponse, error)
 }
 
@@ -43,6 +44,15 @@ func (c *nifApiClient) GetControlDigit(ctx context.Context, in *ControlDigitRequ
 	return out, nil
 }
 
+func (c *nifApiClient) GetType(ctx context.Context, in *TypeRequest, opts ...grpc.CallOption) (*TypeResponse, error) {
+	out := new(TypeResponse)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GetType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nifApiClient) GetParsedNIF(ctx context.Context, in *ParsedNIFRequest, opts ...grpc.CallOption) (*ParsedNIFResponse, error) {
 	out := new(ParsedNIFResponse)
 	err := c.cc.Invoke(ctx, "/proto.NifApi/GetParsedNIF", in, out, opts...)
@@ -57,6 +67,7 @@ func (c *nifApiClient) GetParsedNIF(ctx context.Context, in *ParsedNIFRequest, o
 // for forward compatibility
 type NifApiServer interface {
 	GetControlDigit(context.Context, *ControlDigitRequest) (*ControlDigitResponse, error)
+	GetType(context.Context, *TypeRequest) (*TypeResponse, error)
 	GetParsedNIF(context.Context, *ParsedNIFRequest) (*ParsedNIFResponse, error)
 	mustEmbedUnimplementedNifApiServer()
 }
@@ -67,6 +78,9 @@ type UnimplementedNifApiServer struct {
 
 func (UnimplementedNifApiServer) GetControlDigit(context.Context, *ControlDigitRequest) (*ControlDigitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetControlDigit not implemented")
+}
+func (UnimplementedNifApiServer) GetType(context.Context, *TypeRequest) (*TypeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetType not implemented")
 }
 func (UnimplementedNifApiServer) GetParsedNIF(context.Context, *ParsedNIFRequest) (*ParsedNIFResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetParsedNIF not implemented")
@@ -102,6 +116,24 @@ func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NifApi_GetType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GetType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GetType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GetType(ctx, req.(*TypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NifApi_GetParsedNIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ParsedNIFRequest)
 	if err := dec(in); err != nil {
@@ -130,6 +162,10 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetControlDigit",
 			Handler:    _NifApi_GetControlDigit_Handler,
+		},
+		{
+			MethodName: "GetType",
+			Handler:    _NifApi_GetType_Handler,
 		},
 		{
 			MethodName: "GetParsedNIF",
