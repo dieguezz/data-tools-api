@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	controldigit "github.com/dieguezz/nif-tools/control-digit"
+	nifcontroldigit "github.com/dieguezz/nif-tools/control-digit"
 	nifvalidator "github.com/dieguezz/nif-tools/validator"
 
 	"google.golang.org/grpc/codes"
@@ -47,7 +47,7 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 		}
 
 		nif.Number = number
-		nif.Control = controldigit.GetControlDigit(int32(number))
+		nif.Control = nifcontroldigit.GetControlDigit(int32(number))
 
 		return nif, nil
 
@@ -83,7 +83,7 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 		}
 
 		nif.Number = number
-		nif.Control = controldigit.GetControlDigit(int32(nif.Number))
+		nif.Control = nifcontroldigit.GetControlDigit(int32(nif.Number))
 		return nif, nil
 
 	}
