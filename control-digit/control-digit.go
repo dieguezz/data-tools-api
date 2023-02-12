@@ -6,6 +6,9 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ParsedNIF struct {
@@ -30,9 +33,9 @@ func IsValidNIE(str string) bool {
 	return DNIRegex.MatchString(str)
 }
 
-func GetParsedNIF(str string) ParsedNIF {
+func GetParsedNIF(str string) (ParsedNIF, error) {
 	nif := ParsedNIF{}
-	var parsedString string
+	var parsedString string = str
 	if IsValidNIF(str) {
 		lastChar := string(str[len(str)-1])
 		firstChar := string(str[0:1])
@@ -54,20 +57,20 @@ func GetParsedNIF(str string) ParsedNIF {
 		number, err := strconv.Atoi(parsedString)
 
 		if err != nil {
-			log.Fatalf("There was an error parsing %v", nil)
+			log.Fatalf("There was an error parsing %v", err)
 		}
 
 		nif.Number = number
 		nif.Control = GetControlDigit(int32(number))
 
-		return nif
+		return nif, nil
 
 	} else if IsValidNIE(str) {
 		lastChar := string(str[len(str)-1])
 		firstChar := string(str[0:1])
-		
+
 		nif.Kind = fmt.Sprintf("NIE%s", strings.ToUpper(firstChar))
-		
+
 		_, isControl := strconv.Atoi(lastChar)
 
 		if isControl != nil {
@@ -76,36 +79,34 @@ func GetParsedNIF(str string) ParsedNIF {
 			parsedString = strings.Replace(parsedString, lastChar, "", 2)
 
 			number, err := strconv.Atoi(parsedString)
-			
+
 			if err != nil {
 				log.Fatalf("There was an error parsing string with value %v", nil)
 			}
 
 			nif.Number = number
 
-			return nif
+			return nif, nil
 		}
 
 		parsedString = strings.Replace(str, firstChar, "", 2)
 		number, err := strconv.Atoi(parsedString)
-		
+
 		if err != nil {
 			log.Fatalf("There was an error parsing %s with error %v", parsedString, nil)
 		}
-	
+
 		nif.Number = number
 		nif.Control = GetControlDigit(int32(nif.Number))
-		return nif
+		return nif, nil
 
 	}
-
-	return nif
+	return nif, status.Error(codes.InvalidArgument, "Invalid NIF")
 }
 
 func GetControlDigit(num int32) string {
 
 	remainder := map[int32]string{0: "T", 1: "R", 2: "W", 3: "A", 4: "G", 5: "M", 6: "Y", 7: "F", 8: "P", 9: "D", 10: "X", 11: "B", 12: "N", 13: "J", 14: "Z", 15: "S", 16: "Q", 17: "V", 18: "H", 19: "L", 20: "C", 21: "K", 22: "E"}
-	return remainder[num % 23]
-	
+	return remainder[num%23]
 
 }
