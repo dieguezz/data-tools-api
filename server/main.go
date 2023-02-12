@@ -22,6 +22,11 @@ func (s *server) GetControlDigit(ctx context.Context, in *pb.ControlDigitRequest
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
 }
 
+func (s *server) GetParsedNIF(ctx context.Context, in *pb.ParsedNIFRequest) (*pb.ParsedNIFResponse, error) {
+	nif, err := nifparser.GetParsedNIF(in.GetNif())
+	return &pb.ParsedNIFResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err
+}
+
 func main() {
 	// Grpc server
 	lis, err := net.Listen("tcp", ":9000")

@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NifApiClient interface {
 	GetControlDigit(ctx context.Context, in *ControlDigitRequest, opts ...grpc.CallOption) (*ControlDigitResponse, error)
+	GetParsedNIF(ctx context.Context, in *ParsedNIFRequest, opts ...grpc.CallOption) (*ParsedNIFResponse, error)
 }
 
 type nifApiClient struct {
@@ -42,11 +43,21 @@ func (c *nifApiClient) GetControlDigit(ctx context.Context, in *ControlDigitRequ
 	return out, nil
 }
 
+func (c *nifApiClient) GetParsedNIF(ctx context.Context, in *ParsedNIFRequest, opts ...grpc.CallOption) (*ParsedNIFResponse, error) {
+	out := new(ParsedNIFResponse)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GetParsedNIF", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NifApiServer is the server API for NifApi service.
 // All implementations must embed UnimplementedNifApiServer
 // for forward compatibility
 type NifApiServer interface {
 	GetControlDigit(context.Context, *ControlDigitRequest) (*ControlDigitResponse, error)
+	GetParsedNIF(context.Context, *ParsedNIFRequest) (*ParsedNIFResponse, error)
 	mustEmbedUnimplementedNifApiServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedNifApiServer struct {
 
 func (UnimplementedNifApiServer) GetControlDigit(context.Context, *ControlDigitRequest) (*ControlDigitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetControlDigit not implemented")
+}
+func (UnimplementedNifApiServer) GetParsedNIF(context.Context, *ParsedNIFRequest) (*ParsedNIFResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetParsedNIF not implemented")
 }
 func (UnimplementedNifApiServer) mustEmbedUnimplementedNifApiServer() {}
 
@@ -88,6 +102,24 @@ func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NifApi_GetParsedNIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ParsedNIFRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GetParsedNIF(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GetParsedNIF",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GetParsedNIF(ctx, req.(*ParsedNIFRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NifApi_ServiceDesc is the grpc.ServiceDesc for NifApi service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetControlDigit",
 			Handler:    _NifApi_GetControlDigit_Handler,
+		},
+		{
+			MethodName: "GetParsedNIF",
+			Handler:    _NifApi_GetParsedNIF_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

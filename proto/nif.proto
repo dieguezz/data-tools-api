@@ -12,6 +12,11 @@ service NifApi {
             get: "/controldigit/{nif}"
         };
     };
+    rpc GetParsedNIF(ParsedNIFRequest) returns (ParsedNIFResponse) {
+        option (google.api.http) = {
+            get: "/parse/{nif}"
+        };
+    };
 }
 
 message ControlDigitRequest {
@@ -20,4 +25,14 @@ message ControlDigitRequest {
 
 message ControlDigitResponse {
     string control_digit = 1;
+}
+
+message ParsedNIFRequest {
+    string nif = 1;
+}
+
+message ParsedNIFResponse {
+    int32 number = 1;
+    string kind = 2;
+    string control = 3;
 }
