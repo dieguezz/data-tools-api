@@ -46,6 +46,50 @@
         ]
       }
     },
+    "/generate/nie": {
+      "get": {
+        "operationId": "NifApi_GenerateNIE",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoNIE"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
+    "/generate/nif": {
+      "get": {
+        "operationId": "NifApi_GenerateNIF",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoNIF"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
     "/parse/{nif}": {
       "get": {
         "operationId": "NifApi_GetParsedNIF",
@@ -105,6 +149,66 @@
           "NifApi"
         ]
       }
+    },
+    "/validate/nie/{nie}": {
+      "get": {
+        "operationId": "NifApi_ValidateNIE",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoIsValid"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nie",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
+    "/validate/nif/{nif}": {
+      "get": {
+        "operationId": "NifApi_ValidateNIF",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoIsValid"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nif",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
     }
   },
   "definitions": {
@@ -112,6 +216,30 @@
       "type": "object",
       "properties": {
         "controlDigit": {
+          "type": "string"
+        }
+      }
+    },
+    "protoIsValid": {
+      "type": "object",
+      "properties": {
+        "isValid": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protoNIE": {
+      "type": "object",
+      "properties": {
+        "nie": {
+          "type": "string"
+        }
+      }
+    },
+    "protoNIF": {
+      "type": "object",
+      "properties": {
+        "nif": {
           "type": "string"
         }
       }

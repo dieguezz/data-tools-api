@@ -5,35 +5,52 @@ option go_package="github.com/dieguezz/nif-tools/protopb";
 package proto;
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 service NifApi {
-    rpc GetControlDigit(ControlDigitRequest) returns (ControlDigitResponse) {
+    rpc GetControlDigit(NIF) returns (ControlDigitResponse) {
         option (google.api.http) = {
             get: "/controldigit/{nif}"
         };
     };
-    rpc GetType(TypeRequest) returns (TypeResponse) {
+    rpc GetType(NIF) returns (TypeResponse) {
         option (google.api.http) = {
             get: "/type/{nif}"
         };
     };
-    rpc GetParsedNIF(ParsedNIFRequest) returns (ParsedNIFResponse) {
+    rpc GetParsedNIF(NIF) returns (ParsedNIFResponse) {
         option (google.api.http) = {
             get: "/parse/{nif}"
         };
     };
+    rpc GenerateNIF(google.protobuf.Empty) returns (NIF) {
+        option (google.api.http) = {
+            get: "/generate/nif"
+        };
+    };
+    rpc GenerateNIE(google.protobuf.Empty) returns (NIE) {
+        option (google.api.http) = {
+            get: "/generate/nie"
+        };
+    };
+    rpc ValidateNIF(NIF) returns (IsValid) {
+        option (google.api.http) = {
+            get: "/validate/nif/{nif}"
+        };
+    };
+    rpc ValidateNIE(NIE) returns (IsValid) {
+        option (google.api.http) = {
+            get: "/validate/nie/{nie}"
+        };
+    };
 }
 
-message ControlDigitRequest {
+message NIF {
     string nif = 1;
 }
 
 message ControlDigitResponse {
     string control_digit = 1;
-}
-
-message ParsedNIFRequest {
-    string nif = 1;
 }
 
 message ParsedNIFResponse {
@@ -42,10 +59,14 @@ message ParsedNIFResponse {
     string control = 3;
 }
 
-message TypeRequest {
-    string nif = 1;
-}
-
 message TypeResponse {
     string type = 1;
+}
+
+message NIE {
+    string nie = 1;
+}
+
+message IsValid {
+    bool isValid = 1;
 }

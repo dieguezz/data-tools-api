@@ -2,9 +2,11 @@ package nifgenerators
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
+	"strconv"
 
-	nifcontroldigit "github.com/dieguezz/nif-tools/control-digit"
+	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/control-digit"
 )
 
 type NIFOptions struct {
@@ -27,7 +29,7 @@ func GenerateNIF(args NIFOptions) string {
 		control := nifcontroldigit.GetControlDigit(num)
 		body = fmt.Sprintf("%d%s", num, control)
 	} else {
-		num := int32(numberFromRange(10000000, 99999999))
+		num := int32(numberFromRange(1000000, 9999999))
 		control := nifcontroldigit.GetControlDigit(num)
 		body = fmt.Sprintf("%d%s", num, control)
 	}
@@ -45,4 +47,23 @@ func GenerateNIF(args NIFOptions) string {
 	}
 
 	return fmt.Sprintf("%s%s", prefix, body)
+}
+
+func GenerateNIE() string {
+	num := numberFromRange(1000000, 9999999)
+	body := fmt.Sprintf("%d", num)
+
+	in := []string{"X", "Y", "Z"}
+	prefix := in[rand.Intn(len(in))]
+	prefixMapping := map[string]string{"X": "", "Y": "1", "Z": "2"}
+	base := fmt.Sprintf("%s%d", prefixMapping[prefix], num)
+	baseNum, err := strconv.Atoi(base)
+
+	if err != nil {
+		log.Fatalf("Failed generating NIE %v", err)
+	}
+
+	control := nifcontroldigit.GetControlDigit(int32(baseNum))
+
+	return fmt.Sprintf("%s%s%s", prefix, body, control)
 }

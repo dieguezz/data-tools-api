@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	nifcontroldigit "github.com/dieguezz/nif-tools/control-digit"
-	nifvalidator "github.com/dieguezz/nif-tools/validator"
+	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/control-digit"
+	nifvalidator "github.com/dieguezz/nif-tools/pkg/validator"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -22,7 +22,7 @@ type ParsedNIF struct {
 func GetParsedNIF(str string) (ParsedNIF, error) {
 	nif := ParsedNIF{}
 	var parsedString string = str
-	if nifvalidator.IsValidNIF(str) {
+	if nifvalidator.LooksLikeNIF(str) {
 		lastChar := string(str[len(str)-1])
 		firstChar := string(str[0:1])
 		_, isControl := strconv.Atoi(lastChar)
@@ -51,7 +51,7 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 
 		return nif, nil
 
-	} else if nifvalidator.IsValidNIE(str) {
+	} else if nifvalidator.LooksLikeNIE(str) {
 		lastChar := string(str[len(str)-1])
 		firstChar := string(str[0:1])
 
@@ -75,7 +75,9 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 			return nif, nil
 		}
 
-		parsedString = strings.Replace(str, firstChar, "", 2)
+		prefixMapping := map[string]string{"X": "", "Y": "1", "Z": "2"}
+
+		parsedString = strings.Replace(str, firstChar, prefixMapping[firstChar], 2)
 		number, err := strconv.Atoi(parsedString)
 
 		if err != nil {
