@@ -1,11 +1,11 @@
-package nifvalidator
+package nievalidator
 
 import (
 	"regexp"
 	"strconv"
 	"strings"
 
-	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/control-digit"
+	niecontroldigit "github.com/dieguezz/nif-tools/pkg/nie/control-digit"
 )
 
 func LooksLikeNIF(str string) bool {
@@ -23,37 +23,6 @@ func LooksLikeNIF(str string) bool {
 func LooksLikeNIE(str string) bool {
 	NIERegex := regexp.MustCompile(`^(x|X|y|Y|z|Z)\d{7}((\w)?)$`)
 	return NIERegex.MatchString(str)
-}
-
-func IsValidNIF(str string) bool {
-
-	match := LooksLikeNIF(str)
-	firstChar := string(str[0:1])
-	lastChar := string(str[len(str)-1])
-	numStr := str
-	_, isControl := strconv.Atoi(lastChar)
-
-	if isControl != nil {
-		numStr = numStr[:len(numStr)-1]
-	} else {
-		return false
-	}
-
-	_, isLetter := strconv.Atoi(firstChar)
-
-	if isLetter != nil {
-		numStr = strings.Replace(str, firstChar, "", 2)
-	}
-
-	num, err := strconv.Atoi(numStr)
-
-	if err != nil {
-		return false
-	}
-
-	control := nifcontroldigit.GetNIFControlDigit(int32(num))
-
-	return match && strings.EqualFold(control, lastChar)
 }
 
 func IsValidNIE(str string) bool {
@@ -80,7 +49,7 @@ func IsValidNIE(str string) bool {
 		return false
 	}
 
-	control := nifcontroldigit.GetNIFControlDigit(int32(num))
+	control := niecontroldigit.CalculateNIELetter(int32(num))
 
 	return match && strings.EqualFold(control, lastChar)
 

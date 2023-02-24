@@ -2,11 +2,9 @@ package nifgenerators
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
-	"strconv"
 
-	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/control-digit"
+	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/nif/control-digit"
 )
 
 type NIFOptions struct {
@@ -47,31 +45,4 @@ func GenerateNIF(args NIFOptions) string {
 	}
 
 	return fmt.Sprintf("%s%s", prefix, body)
-}
-
-func GenerateNIE() string {
-	num := numberFromRange(1000000, 9999999)
-	body := fmt.Sprintf("%d", num)
-
-	in := []string{"X", "Y", "Z"}
-	prefix := in[rand.Intn(len(in))]
-	prefixMapping := map[string]string{"X": "", "Y": "1", "Z": "2"}
-	base := fmt.Sprintf("%s%d", prefixMapping[prefix], num)
-	baseNum, err := strconv.Atoi(base)
-
-	if err != nil {
-		log.Fatalf("Failed generating NIE %v", err)
-	}
-
-	control := nifcontroldigit.GetNIFControlDigit(int32(baseNum))
-
-	return fmt.Sprintf("%s%s%s", prefix, body, control)
-}
-
-func GenerateCIF() string {
-	availableLetters := []string{"A", "B", "C", "D", "E", "F", "G", "H", "P", "Q", "S", "K", "L", "M", "X"}
-	num := numberFromRange(1000000, 9999999)
-	letter := availableLetters[rand.Intn(len(availableLetters))]
-	control := nifcontroldigit.GetCIFControlDigit(fmt.Sprintf("%s%v", letter, num))
-	return fmt.Sprintf("%v%v%v", letter, num, control)
 }

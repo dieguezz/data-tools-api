@@ -1,4 +1,4 @@
-package nifparser
+package nifnieparser
 
 import (
 	"fmt"
@@ -6,8 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/control-digit"
-	nifvalidator "github.com/dieguezz/nif-tools/pkg/validator"
+	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
+	nifcontroldigit "github.com/dieguezz/nif-tools/pkg/nif/control-digit"
+	nifvalidator "github.com/dieguezz/nif-tools/pkg/nif/validators"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -51,7 +52,7 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 
 		return nif, nil
 
-	} else if nifvalidator.LooksLikeNIE(str) {
+	} else if nievalidator.LooksLikeNIE(str) {
 		lastChar := string(str[len(str)-1])
 		firstChar := string(str[0:1])
 

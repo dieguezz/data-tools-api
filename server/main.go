@@ -6,9 +6,11 @@ import (
 	"net"
 	"net/http"
 
-	nifgenerators "github.com/dieguezz/nif-tools/pkg/generators"
-	nifparser "github.com/dieguezz/nif-tools/pkg/parser"
-	nifvalidator "github.com/dieguezz/nif-tools/pkg/validator"
+	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
+	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
+	nifnieparser "github.com/dieguezz/nif-tools/pkg/nif-nie-parser"
+	nifgenerators "github.com/dieguezz/nif-tools/pkg/nif/generators"
+	nifvalidator "github.com/dieguezz/nif-tools/pkg/nif/validators"
 	pb "github.com/dieguezz/nif-tools/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -20,23 +22,18 @@ type server struct {
 }
 
 func (s *server) GetNIFControlDigit(ctx context.Context, in *pb.NIF) (*pb.ControlDigitResponse, error) {
-	nif, err := nifparser.GetParsedNIF(in.GetNif())
+	nif, err := nifnieparser.GetParsedNIF(in.GetNif())
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
 }
 
 func (s *server) GetType(ctx context.Context, in *pb.NIF) (*pb.TypeResponse, error) {
-	nif, err := nifparser.GetParsedNIF(in.GetNif())
+	nif, err := nifnieparser.GetParsedNIF(in.GetNif())
 	return &pb.TypeResponse{Type: nif.Kind}, err
 }
 
 func (s *server) GetParsedNIF(ctx context.Context, in *pb.NIF) (*pb.ParsedNIFResponse, error) {
-	nif, err := nifparser.GetParsedNIF(in.GetNif())
+	nif, err := nifnieparser.GetParsedNIF(in.GetNif())
 	return &pb.ParsedNIFResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err
-}
-
-func (s *server) GenerateNIE(ctx context.Context, in *emptypb.Empty) (*pb.NIE, error) {
-	nie := nifgenerators.GenerateNIE()
-	return &pb.NIE{Nie: nie}, nil
 }
 
 func (s *server) GenerateNIF(ctx context.Context, in *emptypb.Empty) (*pb.NIF, error) {
@@ -49,9 +46,19 @@ func (s *server) ValidateNIF(ctx context.Context, in *pb.NIF) (*pb.IsValid, erro
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
+func (s *server) GenerateNIE(ctx context.Context, in *emptypb.Empty) (*pb.NIE, error) {
+	nie := niegenerators.GenerateNIE()
+	return &pb.NIE{Nie: nie}, nil
+}
+
 func (s *server) ValidateNIE(ctx context.Context, in *pb.NIE) (*pb.IsValid, error) {
-	isValid := nifvalidator.IsValidNIE(in.GetNie())
+	isValid := nievalidator.IsValidNIE(in.GetNie())
 	return &pb.IsValid{IsValid: isValid}, nil
+}
+
+func (s *server) GetCIFControlDigit(ctx context.Context, in *pb.CIF) (*pb.ControlDigitResponse, error) {
+	cif, err := nifnieparser.GetParsedNIF(in.GetCif())
+	return &pb.ControlDigitResponse{ControlDigit: cif.Control}, err
 }
 
 func main() {

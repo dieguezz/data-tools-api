@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package="github.com/dieguezz/nif-tools/protopb";
+option go_package = "github.com/dieguezz/nif-tools/protopb";
 
 package proto;
 
@@ -8,65 +8,62 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 service NifApi {
-    rpc GetNIFControlDigit(NIF) returns (ControlDigitResponse) {
-        option (google.api.http) = {
-            get: "/controldigit/{nif}"
-        };
+  rpc GetNIFControlDigit(NIF) returns (ControlDigitResponse) {
+    option (google.api.http) = {
+      get : "/nif/controldigit/{nif}"
     };
-    rpc GetType(NIF) returns (TypeResponse) {
-        option (google.api.http) = {
-            get: "/type/{nif}"
-        };
+  };
+  rpc GetType(NIF) returns (TypeResponse) {
+    option (google.api.http) = {
+      get : "/nif/type/{nif}"
     };
-    rpc GetParsedNIF(NIF) returns (ParsedNIFResponse) {
-        option (google.api.http) = {
-            get: "/parse/{nif}"
-        };
+  };
+  rpc GetParsedNIF(NIF) returns (ParsedNIFResponse) {
+    option (google.api.http) = {
+      get : "/nif/parse/{nif}"
     };
-    rpc GenerateNIF(google.protobuf.Empty) returns (NIF) {
-        option (google.api.http) = {
-            get: "/generate/nif"
-        };
+  };
+  rpc GenerateNIF(google.protobuf.Empty) returns (NIF) {
+    option (google.api.http) = {
+      get : "nif/generate"
     };
-    rpc GenerateNIE(google.protobuf.Empty) returns (NIE) {
-        option (google.api.http) = {
-            get: "/generate/nie"
-        };
+  };
+  rpc ValidateNIF(NIF) returns (IsValid) {
+    option (google.api.http) = {
+      get : "nif/validate/{nif}"
     };
-    rpc ValidateNIF(NIF) returns (IsValid) {
-        option (google.api.http) = {
-            get: "/validate/nif/{nif}"
-        };
+  };
+  rpc GenerateNIE(google.protobuf.Empty) returns (NIE) {
+    option (google.api.http) = {
+      get : "nie/generate"
     };
-    rpc ValidateNIE(NIE) returns (IsValid) {
-        option (google.api.http) = {
-            get: "/validate/nie/{nie}"
-        };
+  };
+  rpc ValidateNIE(NIE) returns (IsValid) {
+    option (google.api.http) = {
+      get : "nie/validate/{nie}"
     };
+  };
+  rpc GetCIFControlDigit(CIF) returns (ControlDigitResponse) {
+    option (google.api.http) = {
+      get : "/cif/controldigit/{cif}"
+    };
+  };
 }
 
-message NIF {
-    string nif = 1;
-}
+message NIF { string nif = 1; }
 
-message ControlDigitResponse {
-    string control_digit = 1;
-}
+message CIF { string cif = 1; }
+
+message ControlDigitResponse { string control_digit = 1; }
 
 message ParsedNIFResponse {
-    int32 number = 1;
-    string kind = 2;
-    string control = 3;
+  int32 number = 1;
+  string kind = 2;
+  string control = 3;
 }
 
-message TypeResponse {
-    string type = 1;
-}
+message TypeResponse { string type = 1; }
 
-message NIE {
-    string nie = 1;
-}
+message NIE { string nie = 1; }
 
-message IsValid {
-    bool isValid = 1;
-}
+message IsValid { bool isValid = 1; }

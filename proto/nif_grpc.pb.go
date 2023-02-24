@@ -27,9 +27,10 @@ type NifApiClient interface {
 	GetType(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*TypeResponse, error)
 	GetParsedNIF(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ParsedNIFResponse, error)
 	GenerateNIF(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIF, error)
-	GenerateNIE(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIE, error)
 	ValidateNIF(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*IsValid, error)
+	GenerateNIE(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIE, error)
 	ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.CallOption) (*IsValid, error)
+	GetCIFControlDigit(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*ControlDigitResponse, error)
 }
 
 type nifApiClient struct {
@@ -42,7 +43,7 @@ func NewNifApiClient(cc grpc.ClientConnInterface) NifApiClient {
 
 func (c *nifApiClient) GetNIFControlDigit(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ControlDigitResponse, error) {
 	out := new(ControlDigitResponse)
-	err := c.cc.Invoke(ctx, "/proto.NifApi/GetControlDigit", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GetNIFControlDigit", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,18 +77,18 @@ func (c *nifApiClient) GenerateNIF(ctx context.Context, in *emptypb.Empty, opts 
 	return out, nil
 }
 
-func (c *nifApiClient) GenerateNIE(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIE, error) {
-	out := new(NIE)
-	err := c.cc.Invoke(ctx, "/proto.NifApi/GenerateNIE", in, out, opts...)
+func (c *nifApiClient) ValidateNIF(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*IsValid, error) {
+	out := new(IsValid)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/ValidateNIF", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *nifApiClient) ValidateNIF(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*IsValid, error) {
-	out := new(IsValid)
-	err := c.cc.Invoke(ctx, "/proto.NifApi/ValidateNIF", in, out, opts...)
+func (c *nifApiClient) GenerateNIE(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIE, error) {
+	out := new(NIE)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GenerateNIE", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,6 +104,15 @@ func (c *nifApiClient) ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *nifApiClient) GetCIFControlDigit(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*ControlDigitResponse, error) {
+	out := new(ControlDigitResponse)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GetCIFControlDigit", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NifApiServer is the server API for NifApi service.
 // All implementations must embed UnimplementedNifApiServer
 // for forward compatibility
@@ -111,9 +121,10 @@ type NifApiServer interface {
 	GetType(context.Context, *NIF) (*TypeResponse, error)
 	GetParsedNIF(context.Context, *NIF) (*ParsedNIFResponse, error)
 	GenerateNIF(context.Context, *emptypb.Empty) (*NIF, error)
-	GenerateNIE(context.Context, *emptypb.Empty) (*NIE, error)
 	ValidateNIF(context.Context, *NIF) (*IsValid, error)
+	GenerateNIE(context.Context, *emptypb.Empty) (*NIE, error)
 	ValidateNIE(context.Context, *NIE) (*IsValid, error)
+	GetCIFControlDigit(context.Context, *CIF) (*ControlDigitResponse, error)
 	mustEmbedUnimplementedNifApiServer()
 }
 
@@ -122,7 +133,7 @@ type UnimplementedNifApiServer struct {
 }
 
 func (UnimplementedNifApiServer) GetNIFControlDigit(context.Context, *NIF) (*ControlDigitResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetControlDigit not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method GetNIFControlDigit not implemented")
 }
 func (UnimplementedNifApiServer) GetType(context.Context, *NIF) (*TypeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetType not implemented")
@@ -133,14 +144,17 @@ func (UnimplementedNifApiServer) GetParsedNIF(context.Context, *NIF) (*ParsedNIF
 func (UnimplementedNifApiServer) GenerateNIF(context.Context, *emptypb.Empty) (*NIF, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateNIF not implemented")
 }
-func (UnimplementedNifApiServer) GenerateNIE(context.Context, *emptypb.Empty) (*NIE, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenerateNIE not implemented")
-}
 func (UnimplementedNifApiServer) ValidateNIF(context.Context, *NIF) (*IsValid, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateNIF not implemented")
 }
+func (UnimplementedNifApiServer) GenerateNIE(context.Context, *emptypb.Empty) (*NIE, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateNIE not implemented")
+}
 func (UnimplementedNifApiServer) ValidateNIE(context.Context, *NIE) (*IsValid, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateNIE not implemented")
+}
+func (UnimplementedNifApiServer) GetCIFControlDigit(context.Context, *CIF) (*ControlDigitResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCIFControlDigit not implemented")
 }
 func (UnimplementedNifApiServer) mustEmbedUnimplementedNifApiServer() {}
 
@@ -155,7 +169,7 @@ func RegisterNifApiServer(s grpc.ServiceRegistrar, srv NifApiServer) {
 	s.RegisterService(&NifApi_ServiceDesc, srv)
 }
 
-func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _NifApi_GetNIFControlDigit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NIF)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -165,7 +179,7 @@ func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.NifApi/GetControlDigit",
+		FullMethod: "/proto.NifApi/GetNIFControlDigit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NifApiServer).GetNIFControlDigit(ctx, req.(*NIF))
@@ -227,24 +241,6 @@ func _NifApi_GenerateNIF_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _NifApi_GenerateNIE_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NifApiServer).GenerateNIE(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.NifApi/GenerateNIE",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NifApiServer).GenerateNIE(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _NifApi_ValidateNIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NIF)
 	if err := dec(in); err != nil {
@@ -259,6 +255,24 @@ func _NifApi_ValidateNIF_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NifApiServer).ValidateNIF(ctx, req.(*NIF))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NifApi_GenerateNIE_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GenerateNIE(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GenerateNIE",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GenerateNIE(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -281,6 +295,24 @@ func _NifApi_ValidateNIE_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NifApi_GetCIFControlDigit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CIF)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GetCIFControlDigit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GetCIFControlDigit",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GetCIFControlDigit(ctx, req.(*CIF))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NifApi_ServiceDesc is the grpc.ServiceDesc for NifApi service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -289,8 +321,8 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*NifApiServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetControlDigit",
-			Handler:    _NifApi_GetControlDigit_Handler,
+			MethodName: "GetNIFControlDigit",
+			Handler:    _NifApi_GetNIFControlDigit_Handler,
 		},
 		{
 			MethodName: "GetType",
@@ -305,16 +337,20 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _NifApi_GenerateNIF_Handler,
 		},
 		{
-			MethodName: "GenerateNIE",
-			Handler:    _NifApi_GenerateNIE_Handler,
-		},
-		{
 			MethodName: "ValidateNIF",
 			Handler:    _NifApi_ValidateNIF_Handler,
 		},
 		{
+			MethodName: "GenerateNIE",
+			Handler:    _NifApi_GenerateNIE_Handler,
+		},
+		{
 			MethodName: "ValidateNIE",
 			Handler:    _NifApi_ValidateNIE_Handler,
+		},
+		{
+			MethodName: "GetCIFControlDigit",
+			Handler:    _NifApi_GetCIFControlDigit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

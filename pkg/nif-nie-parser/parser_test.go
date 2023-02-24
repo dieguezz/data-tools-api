@@ -1,4 +1,4 @@
-package nifparser
+package nifnieparser
 
 import (
 	"reflect"
