@@ -47,7 +47,7 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 		}
 
 		nif.Number = number
-		nif.Control = nifcontroldigit.GetControlDigit(int32(number))
+		nif.Control = nifcontroldigit.GetNIFControlDigit(int32(number))
 
 		return nif, nil
 
@@ -85,7 +85,7 @@ func GetParsedNIF(str string) (ParsedNIF, error) {
 		}
 
 		nif.Number = number
-		nif.Control = nifcontroldigit.GetControlDigit(int32(nif.Number))
+		nif.Control = nifcontroldigit.GetNIFControlDigit(int32(nif.Number))
 		return nif, nil
 
 	}
