@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 service NifApi {
+  // NIF
   rpc GetNIFControlDigit(NIF) returns (ControlDigitResponse) {
     option (google.api.http) = {
       get : "/nif/controldigit/{nif}"
@@ -16,11 +17,6 @@ service NifApi {
   rpc GetType(NIF) returns (TypeResponse) {
     option (google.api.http) = {
       get : "/nif/type/{nif}"
-    };
-  };
-  rpc GetParsedNIF(NIF) returns (ParsedNIFResponse) {
-    option (google.api.http) = {
-      get : "/nif/parse/{nif}"
     };
   };
   rpc GenerateNIF(google.protobuf.Empty) returns (NIF) {
@@ -33,6 +29,8 @@ service NifApi {
       get : "nif/validate/{nif}"
     };
   };
+
+  // NIE
   rpc GenerateNIE(google.protobuf.Empty) returns (NIE) {
     option (google.api.http) = {
       get : "nie/generate"
@@ -43,6 +41,15 @@ service NifApi {
       get : "nie/validate/{nie}"
     };
   };
+
+
+  // NIF - NIE - CIF
+  rpc GetParsedDocument(NIF) returns (ParsedNIFResponse) {
+    option (google.api.http) = {
+      get : "/parse/{nif}"
+    };
+  };
+  // CIF
   rpc GetCIFControlDigit(CIF) returns (ControlDigitResponse) {
     option (google.api.http) = {
       get : "/cif/controldigit/{cif}"

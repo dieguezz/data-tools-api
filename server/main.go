@@ -6,9 +6,9 @@ import (
 	"net"
 	"net/http"
 
+	documentparser "github.com/dieguezz/nif-tools/pkg/document-parser"
 	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
 	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
-	nifnieparser "github.com/dieguezz/nif-tools/pkg/nif-nie-parser"
 	nifgenerators "github.com/dieguezz/nif-tools/pkg/nif/generators"
 	nifvalidator "github.com/dieguezz/nif-tools/pkg/nif/validators"
 	pb "github.com/dieguezz/nif-tools/proto"
@@ -22,17 +22,17 @@ type server struct {
 }
 
 func (s *server) GetNIFControlDigit(ctx context.Context, in *pb.NIF) (*pb.ControlDigitResponse, error) {
-	nif, err := nifnieparser.GetParsedNIF(in.GetNif())
+	nif, err := documentparser.GetParsedDocument(in.GetNif())
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
 }
 
 func (s *server) GetType(ctx context.Context, in *pb.NIF) (*pb.TypeResponse, error) {
-	nif, err := nifnieparser.GetParsedNIF(in.GetNif())
+	nif, err := documentparser.GetParsedDocument(in.GetNif())
 	return &pb.TypeResponse{Type: nif.Kind}, err
 }
 
-func (s *server) GetParsedNIF(ctx context.Context, in *pb.NIF) (*pb.ParsedNIFResponse, error) {
-	nif, err := nifnieparser.GetParsedNIF(in.GetNif())
+func (s *server) GetParsedDocument(ctx context.Context, in *pb.NIF) (*pb.ParsedNIFResponse, error) {
+	nif, err := documentparser.GetParsedDocument(in.GetNif())
 	return &pb.ParsedNIFResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err
 }
 
@@ -57,7 +57,7 @@ func (s *server) ValidateNIE(ctx context.Context, in *pb.NIE) (*pb.IsValid, erro
 }
 
 func (s *server) GetCIFControlDigit(ctx context.Context, in *pb.CIF) (*pb.ControlDigitResponse, error) {
-	cif, err := nifnieparser.GetParsedNIF(in.GetCif())
+	cif, err := documentparser.GetParsedDocument(in.GetCif())
 	return &pb.ControlDigitResponse{ControlDigit: cif.Control}, err
 }
 

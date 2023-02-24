@@ -1,4 +1,4 @@
-package nifnieparser
+package documentparser
 
 import (
 	"fmt"
@@ -14,14 +14,14 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type ParsedNIF struct {
+type ParsedDcocument struct {
 	Number  int
 	Kind    string
 	Control string
 }
 
-func GetParsedNIF(str string) (ParsedNIF, error) {
-	nif := ParsedNIF{}
+func GetParsedDocument(str string) (ParsedDcocument, error) {
+	nif := ParsedDcocument{}
 	var parsedString string = str
 	if nifvalidator.LooksLikeNIF(str) {
 		lastChar := string(str[len(str)-1])
