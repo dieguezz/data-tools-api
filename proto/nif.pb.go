@@ -109,7 +109,7 @@ func (*ControlDigitResponse) Descriptor() ([]byte, []int) {
 	return file_proto_nif_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ControlDigitResponse) GetControlDigit() string {
+func (x *ControlDigitResponse) GetNIFControlDigit() string {
 	if x != nil {
 		return x.ControlDigit
 	}

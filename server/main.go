@@ -19,7 +19,7 @@ type server struct {
 	pb.UnimplementedNifApiServer
 }
 
-func (s *server) GetControlDigit(ctx context.Context, in *pb.NIF) (*pb.ControlDigitResponse, error) {
+func (s *server) GetNIFControlDigit(ctx context.Context, in *pb.NIF) (*pb.ControlDigitResponse, error) {
 	nif, err := nifparser.GetParsedNIF(in.GetNif())
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
 }

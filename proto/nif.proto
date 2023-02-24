@@ -8,7 +8,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 service NifApi {
-    rpc GetControlDigit(NIF) returns (ControlDigitResponse) {
+    rpc GetNIFControlDigit(NIF) returns (ControlDigitResponse) {
         option (google.api.http) = {
             get: "/controldigit/{nif}"
         };

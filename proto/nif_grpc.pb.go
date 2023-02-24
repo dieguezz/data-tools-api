@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NifApiClient interface {
-	GetControlDigit(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ControlDigitResponse, error)
+	GetNIFControlDigit(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ControlDigitResponse, error)
 	GetType(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*TypeResponse, error)
 	GetParsedNIF(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ParsedNIFResponse, error)
 	GenerateNIF(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIF, error)
@@ -40,7 +40,7 @@ func NewNifApiClient(cc grpc.ClientConnInterface) NifApiClient {
 	return &nifApiClient{cc}
 }
 
-func (c *nifApiClient) GetControlDigit(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ControlDigitResponse, error) {
+func (c *nifApiClient) GetNIFControlDigit(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ControlDigitResponse, error) {
 	out := new(ControlDigitResponse)
 	err := c.cc.Invoke(ctx, "/proto.NifApi/GetControlDigit", in, out, opts...)
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *nifApiClient) ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.Ca
 // All implementations must embed UnimplementedNifApiServer
 // for forward compatibility
 type NifApiServer interface {
-	GetControlDigit(context.Context, *NIF) (*ControlDigitResponse, error)
+	GetNIFControlDigit(context.Context, *NIF) (*ControlDigitResponse, error)
 	GetType(context.Context, *NIF) (*TypeResponse, error)
 	GetParsedNIF(context.Context, *NIF) (*ParsedNIFResponse, error)
 	GenerateNIF(context.Context, *emptypb.Empty) (*NIF, error)
@@ -121,7 +121,7 @@ type NifApiServer interface {
 type UnimplementedNifApiServer struct {
 }
 
-func (UnimplementedNifApiServer) GetControlDigit(context.Context, *NIF) (*ControlDigitResponse, error) {
+func (UnimplementedNifApiServer) GetNIFControlDigit(context.Context, *NIF) (*ControlDigitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetControlDigit not implemented")
 }
 func (UnimplementedNifApiServer) GetType(context.Context, *NIF) (*TypeResponse, error) {
@@ -161,14 +161,14 @@ func _NifApi_GetControlDigit_Handler(srv interface{}, ctx context.Context, dec f
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NifApiServer).GetControlDigit(ctx, in)
+		return srv.(NifApiServer).GetNIFControlDigit(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
 		FullMethod: "/proto.NifApi/GetControlDigit",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NifApiServer).GetControlDigit(ctx, req.(*NIF))
+		return srv.(NifApiServer).GetNIFControlDigit(ctx, req.(*NIF))
 	}
 	return interceptor(ctx, in, info, handler)
 }

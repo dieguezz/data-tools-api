@@ -53,7 +53,7 @@ func request_NifApi_GetControlDigit_0(ctx context.Context, marshaler runtime.Mar
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nif", err)
 	}
 
-	msg, err := client.GetControlDigit(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetNIFControlDigit(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
@@ -79,7 +79,7 @@ func local_request_NifApi_GetControlDigit_0(ctx context.Context, marshaler runti
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nif", err)
 	}
 
-	msg, err := server.GetControlDigit(ctx, &protoReq)
+	msg, err := server.GetNIFControlDigit(ctx, &protoReq)
 	return msg, metadata, err
 
 }
