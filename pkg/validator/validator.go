@@ -51,7 +51,7 @@ func IsValidNIF(str string) bool {
 		return false
 	}
 
-	control := nifcontroldigit.GetControlDigit(int32(num))
+	control := nifcontroldigit.GetNIFControlDigit(int32(num))
 
 	return match && strings.EqualFold(control, lastChar)
 }
@@ -80,7 +80,7 @@ func IsValidNIE(str string) bool {
 		return false
 	}
 
-	control := nifcontroldigit.GetControlDigit(int32(num))
+	control := nifcontroldigit.GetNIFControlDigit(int32(num))
 
 	return match && strings.EqualFold(control, lastChar)
 
