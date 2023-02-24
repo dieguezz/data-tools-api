@@ -26,11 +26,11 @@ func GenerateNIF(args NIFOptions) string {
 
 	if !args.UnderAge && !args.ForeignWithoutNIE && !args.LivingOutside {
 		num := int32(numberFromRange(10000000, 99999999))
-		control := nifcontroldigit.GetControlDigit(num)
+		control := nifcontroldigit.GetNIFControlDigit(num)
 		body = fmt.Sprintf("%d%s", num, control)
 	} else {
 		num := int32(numberFromRange(1000000, 9999999))
-		control := nifcontroldigit.GetControlDigit(num)
+		control := nifcontroldigit.GetNIFControlDigit(num)
 		body = fmt.Sprintf("%d%s", num, control)
 	}
 
@@ -63,7 +63,15 @@ func GenerateNIE() string {
 		log.Fatalf("Failed generating NIE %v", err)
 	}
 
-	control := nifcontroldigit.GetControlDigit(int32(baseNum))
+	control := nifcontroldigit.GetNIFControlDigit(int32(baseNum))
 
 	return fmt.Sprintf("%s%s%s", prefix, body, control)
+}
+
+func GenerateCIF() string {
+	availableLetters := []string{"A", "B", "C", "D", "E", "F", "G", "H", "P", "Q", "S", "K", "L", "M", "X"}
+	num := numberFromRange(1000000, 9999999)
+	letter := availableLetters[rand.Intn(len(availableLetters))]
+	control := nifcontroldigit.GetCIFControlDigit(fmt.Sprintf("%s%v", letter, num))
+	return fmt.Sprintf("%v%v%v", letter, num, control)
 }
