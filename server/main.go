@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 
+	cifgenerators "github.com/dieguezz/nif-tools/pkg/cif/generators"
 	documentparser "github.com/dieguezz/nif-tools/pkg/document-parser"
 	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
 	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
@@ -31,9 +32,9 @@ func (s *server) GetType(ctx context.Context, in *pb.NIF) (*pb.TypeResponse, err
 	return &pb.TypeResponse{Type: nif.Kind}, err
 }
 
-func (s *server) GetParsedDocument(ctx context.Context, in *pb.NIF) (*pb.ParsedNIFResponse, error) {
+func (s *server) GetParsedDocument(ctx context.Context, in *pb.NIF) (*pb.ParsedDocumentResponse, error) {
 	nif, err := documentparser.GetParsedDocument(in.GetNif())
-	return &pb.ParsedNIFResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err
+	return &pb.ParsedDocumentResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err
 }
 
 func (s *server) GenerateNIF(ctx context.Context, in *emptypb.Empty) (*pb.NIF, error) {
@@ -59,6 +60,11 @@ func (s *server) ValidateNIE(ctx context.Context, in *pb.NIE) (*pb.IsValid, erro
 func (s *server) GetCIFControlDigit(ctx context.Context, in *pb.CIF) (*pb.ControlDigitResponse, error) {
 	cif, err := documentparser.GetParsedDocument(in.GetCif())
 	return &pb.ControlDigitResponse{ControlDigit: cif.Control}, err
+}
+
+func (s *server) GenerateCIF(ctx context.Context, in *emptypb.Empty) (*pb.CIF, error) {
+	cif := cifgenerators.GenerateCIF()
+	return &pb.CIF{Cif: cif}, nil
 }
 
 func main() {

@@ -21,38 +21,44 @@ service NifApi {
   };
   rpc GenerateNIF(google.protobuf.Empty) returns (NIF) {
     option (google.api.http) = {
-      get : "nif/generate"
+      get : "/nif/generate"
     };
   };
   rpc ValidateNIF(NIF) returns (IsValid) {
     option (google.api.http) = {
-      get : "nif/validate/{nif}"
+      get : "/nif/validate/{nif}"
     };
   };
 
   // NIE
   rpc GenerateNIE(google.protobuf.Empty) returns (NIE) {
     option (google.api.http) = {
-      get : "nie/generate"
+      get : "/nie/generate"
     };
   };
   rpc ValidateNIE(NIE) returns (IsValid) {
     option (google.api.http) = {
-      get : "nie/validate/{nie}"
+      get : "/nie/validate/{nie}"
     };
   };
 
 
   // NIF - NIE - CIF
-  rpc GetParsedDocument(NIF) returns (ParsedNIFResponse) {
+  rpc GetParsedDocument(NIF) returns (ParsedDocumentResponse) {
     option (google.api.http) = {
       get : "/parse/{nif}"
     };
   };
+
   // CIF
   rpc GetCIFControlDigit(CIF) returns (ControlDigitResponse) {
     option (google.api.http) = {
       get : "/cif/controldigit/{cif}"
+    };
+  };
+  rpc GenerateCIF(google.protobuf.Empty) returns (CIF) {
+    option (google.api.http) = {
+      get : "/cif/generate"
     };
   };
 }
@@ -63,7 +69,7 @@ message CIF { string cif = 1; }
 
 message ControlDigitResponse { string control_digit = 1; }
 
-message ParsedNIFResponse {
+message ParsedDocumentResponse {
   int32 number = 1;
   string kind = 2;
   string control = 3;

@@ -16,9 +16,10 @@
     "application/json"
   ],
   "paths": {
-    "/controldigit/{nif}": {
+    "/cif/controldigit/{cif}": {
       "get": {
-        "operationId": "NifApi_GetControlDigit",
+        "summary": "CIF",
+        "operationId": "NifApi_GetCIFControlDigit",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -35,7 +36,7 @@
         },
         "parameters": [
           {
-            "name": "nif",
+            "name": "cif",
             "in": "path",
             "required": true,
             "type": "string"
@@ -46,8 +47,31 @@
         ]
       }
     },
-    "/generate/nie": {
+    "/cif/generate": {
       "get": {
+        "operationId": "NifApi_GenerateCIF",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoCIF"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
+    "/nie/generate": {
+      "get": {
+        "summary": "NIE",
         "operationId": "NifApi_GenerateNIE",
         "responses": {
           "200": {
@@ -68,89 +92,7 @@
         ]
       }
     },
-    "/generate/nif": {
-      "get": {
-        "operationId": "NifApi_GenerateNIF",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/protoNIF"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "NifApi"
-        ]
-      }
-    },
-    "/parse/{nif}": {
-      "get": {
-        "operationId": "NifApi_GetParsedNIF",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/protoParsedNIFResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "nif",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "NifApi"
-        ]
-      }
-    },
-    "/type/{nif}": {
-      "get": {
-        "operationId": "NifApi_GetType",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/protoTypeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "nif",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "NifApi"
-        ]
-      }
-    },
-    "/validate/nie/{nie}": {
+    "/nie/validate/{nie}": {
       "get": {
         "operationId": "NifApi_ValidateNIE",
         "responses": {
@@ -180,7 +122,90 @@
         ]
       }
     },
-    "/validate/nif/{nif}": {
+    "/nif/controldigit/{nif}": {
+      "get": {
+        "summary": "NIF",
+        "operationId": "NifApi_GetNIFControlDigit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoControlDigitResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nif",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
+    "/nif/generate": {
+      "get": {
+        "operationId": "NifApi_GenerateNIF",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoNIF"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
+    "/nif/type/{nif}": {
+      "get": {
+        "operationId": "NifApi_GetType",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoTypeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nif",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
+    "/nif/validate/{nif}": {
       "get": {
         "operationId": "NifApi_ValidateNIF",
         "responses": {
@@ -209,9 +234,48 @@
           "NifApi"
         ]
       }
+    },
+    "/parse/{nif}": {
+      "get": {
+        "summary": "NIF - NIE - CIF",
+        "operationId": "NifApi_GetParsedDocument",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoParsedDocumentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nif",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
     }
   },
   "definitions": {
+    "protoCIF": {
+      "type": "object",
+      "properties": {
+        "cif": {
+          "type": "string"
+        }
+      }
+    },
     "protoControlDigitResponse": {
       "type": "object",
       "properties": {
@@ -244,7 +308,7 @@
         }
       }
     },
-    "protoParsedNIFResponse": {
+    "protoParsedDocumentResponse": {
       "type": "object",
       "properties": {
         "number": {
