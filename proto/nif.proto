@@ -61,6 +61,11 @@ service NifApi {
       get : "/cif/generate"
     };
   };
+    rpc ValidateCIF(CIF) returns (IsValid) {
+    option (google.api.http) = {
+      get : "/cif/validate/{cif}"
+    };
+  };
 }
 
 message NIF { string nif = 1; }

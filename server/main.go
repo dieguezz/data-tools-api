@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	cifgenerators "github.com/dieguezz/nif-tools/pkg/cif/generators"
+	cifvalidator "github.com/dieguezz/nif-tools/pkg/cif/validators"
 	documentparser "github.com/dieguezz/nif-tools/pkg/document-parser"
 	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
 	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
@@ -65,6 +66,11 @@ func (s *server) GetCIFControlDigit(ctx context.Context, in *pb.CIF) (*pb.Contro
 func (s *server) GenerateCIF(ctx context.Context, in *emptypb.Empty) (*pb.CIF, error) {
 	cif := cifgenerators.GenerateCIF()
 	return &pb.CIF{Cif: cif}, nil
+}
+
+func (s *server) ValidateCIF(ctx context.Context, in *pb.CIF) (*pb.IsValid, error) {
+	isValid := cifvalidator.IsValidCIF(in.GetCif())
+	return &pb.IsValid{IsValid: isValid}, nil
 }
 
 func main() {
