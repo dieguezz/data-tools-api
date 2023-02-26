@@ -32,10 +32,12 @@ type NifApiClient interface {
 	GenerateNIE(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NIE, error)
 	ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.CallOption) (*IsValid, error)
 	// NIF - NIE - CIF
-	GetParsedDocument(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ParsedDocumentResponse, error)
+	GetParsedDocument(ctx context.Context, in *Document, opts ...grpc.CallOption) (*ParsedDocumentResponse, error)
+	ValidateDocument(ctx context.Context, in *Document, opts ...grpc.CallOption) (*IsValid, error)
 	// CIF
 	GetCIFControlDigit(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*ControlDigitResponse, error)
 	GenerateCIF(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CIF, error)
+	ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*IsValid, error)
 }
 
 type nifApiClient struct {
@@ -100,9 +102,18 @@ func (c *nifApiClient) ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *nifApiClient) GetParsedDocument(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*ParsedDocumentResponse, error) {
+func (c *nifApiClient) GetParsedDocument(ctx context.Context, in *Document, opts ...grpc.CallOption) (*ParsedDocumentResponse, error) {
 	out := new(ParsedDocumentResponse)
 	err := c.cc.Invoke(ctx, "/proto.NifApi/GetParsedDocument", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *nifApiClient) ValidateDocument(ctx context.Context, in *Document, opts ...grpc.CallOption) (*IsValid, error) {
+	out := new(IsValid)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/ValidateDocument", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -127,6 +138,15 @@ func (c *nifApiClient) GenerateCIF(ctx context.Context, in *emptypb.Empty, opts 
 	return out, nil
 }
 
+func (c *nifApiClient) ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*IsValid, error) {
+	out := new(IsValid)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/ValidateCIF", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NifApiServer is the server API for NifApi service.
 // All implementations must embed UnimplementedNifApiServer
 // for forward compatibility
@@ -140,10 +160,12 @@ type NifApiServer interface {
 	GenerateNIE(context.Context, *emptypb.Empty) (*NIE, error)
 	ValidateNIE(context.Context, *NIE) (*IsValid, error)
 	// NIF - NIE - CIF
-	GetParsedDocument(context.Context, *NIF) (*ParsedDocumentResponse, error)
+	GetParsedDocument(context.Context, *Document) (*ParsedDocumentResponse, error)
+	ValidateDocument(context.Context, *Document) (*IsValid, error)
 	// CIF
 	GetCIFControlDigit(context.Context, *CIF) (*ControlDigitResponse, error)
 	GenerateCIF(context.Context, *emptypb.Empty) (*CIF, error)
+	ValidateCIF(context.Context, *CIF) (*IsValid, error)
 	mustEmbedUnimplementedNifApiServer()
 }
 
@@ -169,14 +191,20 @@ func (UnimplementedNifApiServer) GenerateNIE(context.Context, *emptypb.Empty) (*
 func (UnimplementedNifApiServer) ValidateNIE(context.Context, *NIE) (*IsValid, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateNIE not implemented")
 }
-func (UnimplementedNifApiServer) GetParsedDocument(context.Context, *NIF) (*ParsedDocumentResponse, error) {
+func (UnimplementedNifApiServer) GetParsedDocument(context.Context, *Document) (*ParsedDocumentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetParsedDocument not implemented")
+}
+func (UnimplementedNifApiServer) ValidateDocument(context.Context, *Document) (*IsValid, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateDocument not implemented")
 }
 func (UnimplementedNifApiServer) GetCIFControlDigit(context.Context, *CIF) (*ControlDigitResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCIFControlDigit not implemented")
 }
 func (UnimplementedNifApiServer) GenerateCIF(context.Context, *emptypb.Empty) (*CIF, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateCIF not implemented")
+}
+func (UnimplementedNifApiServer) ValidateCIF(context.Context, *CIF) (*IsValid, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateCIF not implemented")
 }
 func (UnimplementedNifApiServer) mustEmbedUnimplementedNifApiServer() {}
 
@@ -300,7 +328,7 @@ func _NifApi_ValidateNIE_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _NifApi_GetParsedDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NIF)
+	in := new(Document)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -312,7 +340,25 @@ func _NifApi_GetParsedDocument_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/proto.NifApi/GetParsedDocument",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NifApiServer).GetParsedDocument(ctx, req.(*NIF))
+		return srv.(NifApiServer).GetParsedDocument(ctx, req.(*Document))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NifApi_ValidateDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Document)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).ValidateDocument(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/ValidateDocument",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).ValidateDocument(ctx, req.(*Document))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -353,6 +399,24 @@ func _NifApi_GenerateCIF_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NifApi_ValidateCIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CIF)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).ValidateCIF(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/ValidateCIF",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).ValidateCIF(ctx, req.(*CIF))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NifApi_ServiceDesc is the grpc.ServiceDesc for NifApi service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -389,12 +453,20 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _NifApi_GetParsedDocument_Handler,
 		},
 		{
+			MethodName: "ValidateDocument",
+			Handler:    _NifApi_ValidateDocument_Handler,
+		},
+		{
 			MethodName: "GetCIFControlDigit",
 			Handler:    _NifApi_GetCIFControlDigit_Handler,
 		},
 		{
 			MethodName: "GenerateCIF",
 			Handler:    _NifApi_GenerateCIF_Handler,
+		},
+		{
+			MethodName: "ValidateCIF",
+			Handler:    _NifApi_ValidateCIF_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

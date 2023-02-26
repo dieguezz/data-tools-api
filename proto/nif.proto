@@ -44,9 +44,14 @@ service NifApi {
 
 
   // NIF - NIE - CIF
-  rpc GetParsedDocument(NIF) returns (ParsedDocumentResponse) {
+  rpc GetParsedDocument(Document) returns (ParsedDocumentResponse) {
     option (google.api.http) = {
-      get : "/parse/{nif}"
+      get : "/document/parse/{document}"
+    };
+  };
+  rpc ValidateDocument(Document) returns (IsValid) {
+    option (google.api.http) = {
+      get : "/document/validate/{document}"
     };
   };
 
@@ -71,6 +76,8 @@ service NifApi {
 message NIF { string nif = 1; }
 
 message CIF { string cif = 1; }
+
+message Document { string document = 1; }
 
 message ControlDigitResponse { string control_digit = 1; }
 

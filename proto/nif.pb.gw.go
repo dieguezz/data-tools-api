@@ -277,7 +277,7 @@ func local_request_NifApi_ValidateNIE_0(ctx context.Context, marshaler runtime.M
 }
 
 func request_NifApi_GetParsedDocument_0(ctx context.Context, marshaler runtime.Marshaler, client NifApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq NIF
+	var protoReq Document
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -287,14 +287,14 @@ func request_NifApi_GetParsedDocument_0(ctx context.Context, marshaler runtime.M
 		_   = err
 	)
 
-	val, ok = pathParams["nif"]
+	val, ok = pathParams["document"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "nif")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "document")
 	}
 
-	protoReq.Nif, err = runtime.String(val)
+	protoReq.Document, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nif", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "document", err)
 	}
 
 	msg, err := client.GetParsedDocument(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -303,7 +303,7 @@ func request_NifApi_GetParsedDocument_0(ctx context.Context, marshaler runtime.M
 }
 
 func local_request_NifApi_GetParsedDocument_0(ctx context.Context, marshaler runtime.Marshaler, server NifApiServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq NIF
+	var protoReq Document
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -313,17 +313,69 @@ func local_request_NifApi_GetParsedDocument_0(ctx context.Context, marshaler run
 		_   = err
 	)
 
-	val, ok = pathParams["nif"]
+	val, ok = pathParams["document"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "nif")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "document")
 	}
 
-	protoReq.Nif, err = runtime.String(val)
+	protoReq.Document, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nif", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "document", err)
 	}
 
 	msg, err := server.GetParsedDocument(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_NifApi_ValidateDocument_0(ctx context.Context, marshaler runtime.Marshaler, client NifApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq Document
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["document"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "document")
+	}
+
+	protoReq.Document, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "document", err)
+	}
+
+	msg, err := client.ValidateDocument(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_NifApi_ValidateDocument_0(ctx context.Context, marshaler runtime.Marshaler, server NifApiServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq Document
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["document"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "document")
+	}
+
+	protoReq.Document, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "document", err)
+	}
+
+	msg, err := server.ValidateDocument(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -394,6 +446,58 @@ func local_request_NifApi_GenerateCIF_0(ctx context.Context, marshaler runtime.M
 	var metadata runtime.ServerMetadata
 
 	msg, err := server.GenerateCIF(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_NifApi_ValidateCIF_0(ctx context.Context, marshaler runtime.Marshaler, client NifApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq CIF
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["cif"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cif")
+	}
+
+	protoReq.Cif, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cif", err)
+	}
+
+	msg, err := client.ValidateCIF(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_NifApi_ValidateCIF_0(ctx context.Context, marshaler runtime.Marshaler, server NifApiServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq CIF
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["cif"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "cif")
+	}
+
+	protoReq.Cif, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "cif", err)
+	}
+
+	msg, err := server.ValidateCIF(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -562,7 +666,7 @@ func RegisterNifApiHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.NifApi/GetParsedDocument", runtime.WithHTTPPathPattern("/parse/{nif}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.NifApi/GetParsedDocument", runtime.WithHTTPPathPattern("/document/parse/{document}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -576,6 +680,31 @@ func RegisterNifApiHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		}
 
 		forward_NifApi_GetParsedDocument_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_NifApi_ValidateDocument_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.NifApi/ValidateDocument", runtime.WithHTTPPathPattern("/document/validate/{document}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_NifApi_ValidateDocument_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_NifApi_ValidateDocument_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -626,6 +755,31 @@ func RegisterNifApiHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		}
 
 		forward_NifApi_GenerateCIF_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_NifApi_ValidateCIF_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/proto.NifApi/ValidateCIF", runtime.WithHTTPPathPattern("/cif/validate/{cif}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_NifApi_ValidateCIF_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_NifApi_ValidateCIF_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -808,7 +962,7 @@ func RegisterNifApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.NifApi/GetParsedDocument", runtime.WithHTTPPathPattern("/parse/{nif}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.NifApi/GetParsedDocument", runtime.WithHTTPPathPattern("/document/parse/{document}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -821,6 +975,28 @@ func RegisterNifApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		}
 
 		forward_NifApi_GetParsedDocument_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_NifApi_ValidateDocument_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.NifApi/ValidateDocument", runtime.WithHTTPPathPattern("/document/validate/{document}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_NifApi_ValidateDocument_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_NifApi_ValidateDocument_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -868,6 +1044,28 @@ func RegisterNifApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 
 	})
 
+	mux.Handle("GET", pattern_NifApi_ValidateCIF_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/proto.NifApi/ValidateCIF", runtime.WithHTTPPathPattern("/cif/validate/{cif}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_NifApi_ValidateCIF_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_NifApi_ValidateCIF_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -884,11 +1082,15 @@ var (
 
 	pattern_NifApi_ValidateNIE_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 0}, []string{"nie", "validate"}, ""))
 
-	pattern_NifApi_GetParsedDocument_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"parse", "nif"}, ""))
+	pattern_NifApi_GetParsedDocument_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 0}, []string{"document", "parse"}, ""))
+
+	pattern_NifApi_ValidateDocument_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 0}, []string{"document", "validate"}, ""))
 
 	pattern_NifApi_GetCIFControlDigit_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 0}, []string{"cif", "controldigit"}, ""))
 
 	pattern_NifApi_GenerateCIF_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"cif", "generate"}, ""))
+
+	pattern_NifApi_ValidateCIF_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 0}, []string{"cif", "validate"}, ""))
 )
 
 var (
@@ -906,7 +1108,11 @@ var (
 
 	forward_NifApi_GetParsedDocument_0 = runtime.ForwardResponseMessage
 
+	forward_NifApi_ValidateDocument_0 = runtime.ForwardResponseMessage
+
 	forward_NifApi_GetCIFControlDigit_0 = runtime.ForwardResponseMessage
 
 	forward_NifApi_GenerateCIF_0 = runtime.ForwardResponseMessage
+
+	forward_NifApi_ValidateCIF_0 = runtime.ForwardResponseMessage
 )

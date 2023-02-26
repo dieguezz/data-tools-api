@@ -8,7 +8,8 @@ import (
 
 	cifgenerators "github.com/dieguezz/nif-tools/pkg/cif/generators"
 	cifvalidator "github.com/dieguezz/nif-tools/pkg/cif/validators"
-	documentparser "github.com/dieguezz/nif-tools/pkg/document-parser"
+	documentparser "github.com/dieguezz/nif-tools/pkg/document/parser"
+	documentvalidator "github.com/dieguezz/nif-tools/pkg/document/validators"
 	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
 	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
 	nifgenerators "github.com/dieguezz/nif-tools/pkg/nif/generators"
@@ -33,9 +34,14 @@ func (s *server) GetType(ctx context.Context, in *pb.NIF) (*pb.TypeResponse, err
 	return &pb.TypeResponse{Type: nif.Kind}, err
 }
 
-func (s *server) GetParsedDocument(ctx context.Context, in *pb.NIF) (*pb.ParsedDocumentResponse, error) {
-	nif, err := documentparser.GetParsedDocument(in.GetNif())
+func (s *server) GetParsedDocument(ctx context.Context, in *pb.Document) (*pb.ParsedDocumentResponse, error) {
+	nif, err := documentparser.GetParsedDocument(in.GetDocument())
 	return &pb.ParsedDocumentResponse{Number: int32(nif.Number), Kind: nif.Kind, Control: nif.Control}, err
+}
+
+func (s *server) ValidateCIFNIENIF(ctx context.Context, in *pb.Document) (*pb.IsValid, error) {
+	isValid := documentvalidator.IsValidCIFNIENIF(in.GetDocument())
+	return &pb.IsValid{IsValid: isValid}, nil
 }
 
 func (s *server) GenerateNIF(ctx context.Context, in *emptypb.Empty) (*pb.NIF, error) {
