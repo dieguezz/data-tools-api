@@ -17,7 +17,6 @@ import (
 	pb "github.com/dieguezz/nif-tools/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type server struct {
@@ -44,9 +43,14 @@ func (s *server) ValidateCIFNIENIF(ctx context.Context, in *pb.Document) (*pb.Is
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
-func (s *server) GenerateNIF(ctx context.Context, in *emptypb.Empty) (*pb.NIF, error) {
-	nif := nifgenerators.GenerateNIF(nifgenerators.NIFOptions{})
+func (s *server) GenerateNIF(ctx context.Context, in *pb.BulkParams) (*pb.NIF, error) {
+	nif := nifgenerators.GenerateNIF(nifgenerators.NIFOptions{Amount: in.GetAmount()})
 	return &pb.NIF{Nif: nif}, nil
+}
+
+func (s *server) GenerateNIFs(ctx context.Context, in *pb.BulkParams) (*pb.NIFs, error) {
+	nifs, err := nifgenerators.GeneratedNIFs(nifgenerators.NIFOptions{Amount: in.GetAmount()})
+	return &pb.NIFs{NIFs: nifs}, err
 }
 
 func (s *server) ValidateNIF(ctx context.Context, in *pb.NIF) (*pb.IsValid, error) {
@@ -54,7 +58,7 @@ func (s *server) ValidateNIF(ctx context.Context, in *pb.NIF) (*pb.IsValid, erro
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
-func (s *server) GenerateNIE(ctx context.Context, in *emptypb.Empty) (*pb.NIE, error) {
+func (s *server) GenerateNIE(ctx context.Context, in *pb.BulkParams) (*pb.NIE, error) {
 	nie := niegenerators.GenerateNIE()
 	return &pb.NIE{Nie: nie}, nil
 }
@@ -69,7 +73,7 @@ func (s *server) GetCIFControlDigit(ctx context.Context, in *pb.CIF) (*pb.Contro
 	return &pb.ControlDigitResponse{ControlDigit: cif.Control}, err
 }
 
-func (s *server) GenerateCIF(ctx context.Context, in *emptypb.Empty) (*pb.CIF, error) {
+func (s *server) GenerateCIF(ctx context.Context, in *pb.BulkParams) (*pb.CIF, error) {
 	cif := cifgenerators.GenerateCIF()
 	return &pb.CIF{Cif: cif}, nil
 }

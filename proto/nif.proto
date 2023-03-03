@@ -5,7 +5,7 @@ option go_package = "github.com/dieguezz/nif-tools/protopb";
 package proto;
 
 import "google/api/annotations.proto";
-import "google/protobuf/empty.proto";
+// import "google/protobuf/empty.proto";
 
 service NifApi {
   // NIF
@@ -19,9 +19,14 @@ service NifApi {
       get : "/nif/type/{nif}"
     };
   };
-  rpc GenerateNIF(google.protobuf.Empty) returns (NIF) {
+  rpc GenerateNIF(BulkParams) returns (NIF) {
     option (google.api.http) = {
       get : "/nif/generate"
+    };
+  };
+  rpc GenerateNIFs(BulkParams) returns (NIFs) {
+    option (google.api.http) = {
+      get : "/nif/generate/bulk"
     };
   };
   rpc ValidateNIF(NIF) returns (IsValid) {
@@ -31,7 +36,7 @@ service NifApi {
   };
 
   // NIE
-  rpc GenerateNIE(google.protobuf.Empty) returns (NIE) {
+  rpc GenerateNIE(BulkParams) returns (NIE) {
     option (google.api.http) = {
       get : "/nie/generate"
     };
@@ -41,7 +46,6 @@ service NifApi {
       get : "/nie/validate/{nie}"
     };
   };
-
 
   // NIF - NIE - CIF
   rpc GetParsedDocument(Document) returns (ParsedDocumentResponse) {
@@ -61,12 +65,12 @@ service NifApi {
       get : "/cif/controldigit/{cif}"
     };
   };
-  rpc GenerateCIF(google.protobuf.Empty) returns (CIF) {
+  rpc GenerateCIF(BulkParams) returns (CIF) {
     option (google.api.http) = {
       get : "/cif/generate"
     };
   };
-    rpc ValidateCIF(CIF) returns (IsValid) {
+  rpc ValidateCIF(CIF) returns (IsValid) {
     option (google.api.http) = {
       get : "/cif/validate/{cif}"
     };
@@ -75,7 +79,11 @@ service NifApi {
 
 message NIF { string nif = 1; }
 
+message NIFs { repeated string NIFs = 1; }
+
 message CIF { string cif = 1; }
+
+message BulkParams { optional int32 amount = 1; }
 
 message Document { string document = 1; }
 
