@@ -1,0 +1,124 @@
+# Roadmap
+
+- Datos Jurídicos
+	- NIF
+		- [x] Generador
+		- [x] Validador
+		- [x] Dígito de control
+		- [x] bulk
+		- [ ] Europeo
+	- NIE
+		- [x] Generador
+		- [x] Validador
+		- [x] Dígito de control
+		- [x] bulk
+	- CIF
+		- Generadores
+			- [x] CIF
+			- [ ] Custom
+		- [x] Validador
+		- [x] Dígito de control
+		- [ ] bulk
+	- IBAN / CCC / Tarjetas de crédito
+		- Generadores
+			- [ ] IBAN
+			- [ ] IBAN Custom
+			- [ ] CCC
+			- [ ] Tarjetas
+				- [ ] VISA
+				- [ ] MASTER CARD
+				- [ ] AMERICAN EXPRESS
+				- [ ] DISCOVER
+		- Validadores
+			- [ ] IBAN
+			- [ ] CCC
+			- Tarjetas
+				- [ ] VISA 
+				- [ ] MASTER CARD
+				- [ ] AMERICAN EXPRESS
+				- [ ] DISCOVER
+		- Convertidores
+			- [ ] CCC - IBAN 
+			- [ ] 
+	- Nº Seguridad Social
+		- [ ] Generador
+		- [ ] Validador
+	- Pasaporte
+		- [ ] Generador
+		- [ ] Validador
+	- Personas
+		- [ ] Apellido
+		- [ ] Nombre
+		- [ ] DOI
+		- [ ] Email
+		- [ ] Dirección
+		- [ ] Pseudónimo
+		- [ ] Fecha de nacimiento
+	- Vehículos
+		- Generador de Matrículas
+			- [ ] Coche
+			- [ ] Moto
+			- [ ] Remolque
+			- [ ] Vehículo especial
+			- [ ] Vehículo turístico
+			- [ ] Vehículo histórico
+		- [ ] Generador de nº de bastidor
+	- LEI
+		- [ ] Generador
+		- [ ] Validador
+	- CUPS
+		- Generadores
+			- [ ] Luz
+			- [ ] Gas
+		- Validadores
+			- [ ] Luz
+			- [ ] Gas
+	- Catastro
+		- Generadores
+			- [ ] Referencia catastral urbana
+			- [ ] Referencia catastral rústica
+		- Validadores
+			- [ ] Referencia catastral urbana
+			- [ ] Referencia catastral rústica
+	- ISIN
+		- [ ] Generador
+		- [ ] Validador
+- Texto
+	- Generadores
+		- [ ] Palabras
+		- [ ] párrafos
+		- [ ] Letras
+	- Contadores
+		- [ ] Palabras
+		- [ ] Letras
+- Contraseñas
+	- [ ] Generador
+	- [ ] Validador de seguridad
+- Imágenes
+	- Optimizadores
+		- [ ] PNG
+		- [ ] JPG
+	- Convertidores
+		- [ ] JPG a WebP
+		- [ ] PNG a WebP
+		- [ ] ...
+	- [ ] Resize
+	- [ ] Crop
+- [ ] 
+- Teléfonos
+	- IMEI
+		- [ ] Generador
+		- [ ] Validador
+	- Generadores
+		- [ ] Fijo
+		- [ ] Por provinciasç
+		- [ ] Internacional
+		- [ ] Interncional custom
+		- [ ] Teléfono móvil
+- QR
+	- [ ] Generador
+	- [ ] Validador
+- Códigos de barras
+	- [ ] Generador
+	- [ ] Validador
+	- [ ] Bastidor 
