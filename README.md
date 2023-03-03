@@ -1,28 +1,28 @@
 **Data tools API** contains generators, validators, counters, and different tools to work with data related to spanish official and unofficial data like plates, identifiers, taxes, etc.
 
-# Roadmap
+## Roadmap
 
-- Datos Jurídicos
+- Official data
 	- NIF
-		- [x] Generador
-		- [x] Validador
+		- [x] Generator
+		- [x] Validators
 		- [x] Dígito de control
-		- [x] bulk
+		- [x] Bulk
 		- [ ] Europeo
 	- NIE
-		- [x] Generador
-		- [x] Validador
+		- [x] Generator
+		- [x] Validators
 		- [x] Dígito de control
-		- [x] bulk
+		- [x] Bulk
 	- CIF
-		- Generadores
+		- Generators
 			- [x] CIF
 			- [ ] Custom
-		- [x] Validador
+		- [x] Validators
 		- [x] Dígito de control
-		- [ ] bulk
-	- IBAN / CCC / Tarjetas de crédito
-		- Generadores
+		- [ ] Bulk
+	- IBAN / CCC / Credit cards
+		- Generators
 			- [ ] IBAN
 			- [ ] IBAN Custom
 			- [ ] CCC
@@ -31,7 +31,7 @@
 				- [ ] MASTER CARD
 				- [ ] AMERICAN EXPRESS
 				- [ ] DISCOVER
-		- Validadores
+		- Validators
 			- [ ] IBAN
 			- [ ] CCC
 			- Tarjetas
@@ -39,16 +39,15 @@
 				- [ ] MASTER CARD
 				- [ ] AMERICAN EXPRESS
 				- [ ] DISCOVER
-		- Convertidores
+		- Converters
 			- [ ] CCC - IBAN 
-			- [ ] 
 	- Nº Seguridad Social
-		- [ ] Generador
-		- [ ] Validador
-	- Pasaporte
-		- [ ] Generador
-		- [ ] Validador
-	- Personas
+		- [ ] Generator
+		- [ ] Validators
+	- Passport
+		- [ ] Generator
+		- [ ] Validators
+	- People
 		- [ ] Apellido
 		- [ ] Nombre
 		- [ ] DOI
@@ -56,71 +55,77 @@
 		- [ ] Dirección
 		- [ ] Pseudónimo
 		- [ ] Fecha de nacimiento
-	- Vehículos
-		- Generador de Matrículas
+	- Vehicles
+		- Generator de Matrículas
 			- [ ] Coche
 			- [ ] Moto
 			- [ ] Remolque
 			- [ ] Vehículo especial
 			- [ ] Vehículo turístico
 			- [ ] Vehículo histórico
-		- [ ] Generador de nº de bastidor
+		- [ ] Generator de nº de bastidor
 	- LEI
-		- [ ] Generador
-		- [ ] Validador
+		- [ ] Generator
+		- [ ] Validators
 	- CUPS
-		- Generadores
+		- Generators
 			- [ ] Luz
 			- [ ] Gas
-		- Validadores
+		- Validators
 			- [ ] Luz
 			- [ ] Gas
 	- Catastro
-		- Generadores
+		- Generators
 			- [ ] Referencia catastral urbana
 			- [ ] Referencia catastral rústica
-		- Validadores
+		- Validators
 			- [ ] Referencia catastral urbana
 			- [ ] Referencia catastral rústica
 	- ISIN
-		- [ ] Generador
-		- [ ] Validador
-- Texto
-	- Generadores
+		- [ ] Generator
+		- [ ] Validators
+- Text
+	- Generators
 		- [ ] Palabras
 		- [ ] párrafos
 		- [ ] Letras
 	- Contadores
 		- [ ] Palabras
 		- [ ] Letras
-- Contraseñas
-	- [ ] Generador
-	- [ ] Validador de seguridad
-- Imágenes
+- Passwords
+	- [ ] Generator
+	- [ ] Validators de seguridad
+- Images
 	- Optimizadores
 		- [ ] PNG
 		- [ ] JPG
-	- Convertidores
+	- Converters
 		- [ ] JPG a WebP
 		- [ ] PNG a WebP
 		- [ ] ...
 	- [ ] Resize
 	- [ ] Crop
-- [ ] 
-- Teléfonos
+- Phones
 	- IMEI
-		- [ ] Generador
-		- [ ] Validador
-	- Generadores
+		- [ ] Generator
+		- [ ] Validators
+	- Generators
 		- [ ] Fijo
 		- [ ] Por provinciasç
 		- [ ] Internacional
 		- [ ] Interncional custom
 		- [ ] Teléfono móvil
 - QR
-	- [ ] Generador
-	- [ ] Validador
-- Códigos de barras
-	- [ ] Generador
-	- [ ] Validador
+	- [ ] Generator
+	- [ ] Validators
+- Bar codeº
+	- [ ] Generator
+	- [ ] Validators
 	- [ ] Bastidor 
+- Mmortgage
+    - Calculations
+    - [ ] Interest savings
+    - [ ] Monthly price
+    - [ ] Time savings by Month
+    - [ ] Time savings by Year
+    - [ ] Total time interest
