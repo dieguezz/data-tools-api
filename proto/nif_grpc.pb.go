@@ -30,6 +30,7 @@ type NifApiClient interface {
 	ValidateNIF(ctx context.Context, in *NIF, opts ...grpc.CallOption) (*IsValid, error)
 	// NIE
 	GenerateNIE(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*NIE, error)
+	GenerateNIEs(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*NIE, error)
 	ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.CallOption) (*IsValid, error)
 	// NIF - NIE - CIF
 	GetParsedDocument(ctx context.Context, in *Document, opts ...grpc.CallOption) (*ParsedDocumentResponse, error)
@@ -102,6 +103,15 @@ func (c *nifApiClient) GenerateNIE(ctx context.Context, in *BulkParams, opts ...
 	return out, nil
 }
 
+func (c *nifApiClient) GenerateNIEs(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*NIE, error) {
+	out := new(NIE)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GenerateNIEs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nifApiClient) ValidateNIE(ctx context.Context, in *NIE, opts ...grpc.CallOption) (*IsValid, error) {
 	out := new(IsValid)
 	err := c.cc.Invoke(ctx, "/proto.NifApi/ValidateNIE", in, out, opts...)
@@ -168,6 +178,7 @@ type NifApiServer interface {
 	ValidateNIF(context.Context, *NIF) (*IsValid, error)
 	// NIE
 	GenerateNIE(context.Context, *BulkParams) (*NIE, error)
+	GenerateNIEs(context.Context, *BulkParams) (*NIE, error)
 	ValidateNIE(context.Context, *NIE) (*IsValid, error)
 	// NIF - NIE - CIF
 	GetParsedDocument(context.Context, *Document) (*ParsedDocumentResponse, error)
@@ -200,6 +211,9 @@ func (UnimplementedNifApiServer) ValidateNIF(context.Context, *NIF) (*IsValid, e
 }
 func (UnimplementedNifApiServer) GenerateNIE(context.Context, *BulkParams) (*NIE, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateNIE not implemented")
+}
+func (UnimplementedNifApiServer) GenerateNIEs(context.Context, *BulkParams) (*NIE, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateNIEs not implemented")
 }
 func (UnimplementedNifApiServer) ValidateNIE(context.Context, *NIE) (*IsValid, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateNIE not implemented")
@@ -336,6 +350,24 @@ func _NifApi_GenerateNIE_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NifApiServer).GenerateNIE(ctx, req.(*BulkParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NifApi_GenerateNIEs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BulkParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GenerateNIEs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GenerateNIEs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GenerateNIEs(ctx, req.(*BulkParams))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -478,6 +510,10 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerateNIE",
 			Handler:    _NifApi_GenerateNIE_Handler,
+		},
+		{
+			MethodName: "GenerateNIEs",
+			Handler:    _NifApi_GenerateNIEs_Handler,
 		},
 		{
 			MethodName: "ValidateNIE",

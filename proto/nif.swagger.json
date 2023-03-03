@@ -201,6 +201,37 @@
         ]
       }
     },
+    "/nie/generate/bulk": {
+      "get": {
+        "operationId": "NifApi_GenerateNIEs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoNIE"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "amount",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
     "/nie/validate/{nie}": {
       "get": {
         "operationId": "NifApi_ValidateNIE",

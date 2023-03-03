@@ -41,6 +41,11 @@ service NifApi {
       get : "/nie/generate"
     };
   };
+  rpc GenerateNIEs(BulkParams) returns (NIE) {
+    option (google.api.http) = {
+      get : "/nie/generate/bulk"
+    };
+  };
   rpc ValidateNIE(NIE) returns (IsValid) {
     option (google.api.http) = {
       get : "/nie/validate/{nie}"
@@ -80,6 +85,8 @@ service NifApi {
 message NIF { string nif = 1; }
 
 message NIFs { repeated string NIFs = 1; }
+
+message NIEs { repeated string NIEs = 1; }
 
 message CIF { string cif = 1; }
 

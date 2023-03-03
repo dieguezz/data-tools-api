@@ -5,12 +5,42 @@ import (
 	"log"
 	"math/rand"
 	"strconv"
+	"sync"
 
 	niecontroldigit "github.com/dieguezz/nif-tools/pkg/nie/control-digit"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func numberFromRange(low, hi int) int {
 	return low + rand.Intn(hi-low)
+}
+
+func GeneratedNIEs(amount int) ([]string, error) {
+	var wg sync.WaitGroup
+	results := make(chan string, amount)
+	limit := 100000
+	if int(amount) > limit {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("Max limit reached: 'amount' should not be bigger than %v", limit))
+	}
+	for i := 0; i < int(amount); i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			nie := GenerateNIE()
+			results <- nie
+		}()
+	}
+
+	wg.Wait()
+	close(results)
+
+	var res []string
+
+	for nie := range results {
+		res = append(res, nie)
+	}
+	return res, nil
 }
 
 func GenerateNIE() string {

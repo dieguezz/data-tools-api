@@ -63,6 +63,11 @@ func (s *server) GenerateNIE(ctx context.Context, in *pb.BulkParams) (*pb.NIE, e
 	return &pb.NIE{Nie: nie}, nil
 }
 
+func (s *server) GenerateNIEs(ctx context.Context, in *pb.BulkParams) (*pb.NIEs, error) {
+	NIEs, err := niegenerators.GeneratedNIEs(int(in.GetAmount()))
+	return &pb.NIEs{NIEs: NIEs}, err
+}
+
 func (s *server) ValidateNIE(ctx context.Context, in *pb.NIE) (*pb.IsValid, error) {
 	isValid := nievalidator.IsValidNIE(in.GetNie())
 	return &pb.IsValid{IsValid: isValid}, nil
