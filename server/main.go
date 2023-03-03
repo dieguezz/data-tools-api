@@ -17,6 +17,7 @@ import (
 	pb "github.com/dieguezz/nif-tools/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type server struct {
@@ -43,8 +44,8 @@ func (s *server) ValidateCIFNIENIF(ctx context.Context, in *pb.Document) (*pb.Is
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
-func (s *server) GenerateNIF(ctx context.Context, in *pb.BulkParams) (*pb.NIF, error) {
-	nif := nifgenerators.GenerateNIF(nifgenerators.NIFOptions{Amount: in.GetAmount()})
+func (s *server) GenerateNIF(ctx context.Context, in *emptypb.Empty) (*pb.NIF, error) {
+	nif := nifgenerators.GenerateNIF(nifgenerators.NIFOptions{})
 	return &pb.NIF{Nif: nif}, nil
 }
 
@@ -58,7 +59,7 @@ func (s *server) ValidateNIF(ctx context.Context, in *pb.NIF) (*pb.IsValid, erro
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
-func (s *server) GenerateNIE(ctx context.Context, in *pb.BulkParams) (*pb.NIE, error) {
+func (s *server) GenerateNIE(ctx context.Context, in *emptypb.Empty) (*pb.NIE, error) {
 	nie := niegenerators.GenerateNIE()
 	return &pb.NIE{Nie: nie}, nil
 }

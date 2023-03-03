@@ -187,15 +187,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "amount",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
         "tags": [
           "NifApi"
         ]
@@ -208,7 +199,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/protoNIE"
+              "$ref": "#/definitions/protoNIEs"
             }
           },
           "default": {
@@ -310,15 +301,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "amount",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
         "tags": [
           "NifApi"
         ]
@@ -446,6 +428,17 @@
       "properties": {
         "nie": {
           "type": "string"
+        }
+      }
+    },
+    "protoNIEs": {
+      "type": "object",
+      "properties": {
+        "NIEs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
