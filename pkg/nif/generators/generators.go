@@ -21,7 +21,7 @@ func numberFromRange(low, hi int) int {
 	return low + rand.Intn(hi-low)
 }
 
-func GeneratedNIFs(args NIFOptions) ([]string, error) {
+func GenerateNIFs(args NIFOptions) ([]string, error) {
 	var wg sync.WaitGroup
 	results := make(chan string, args.Amount)
 	limit := 100000

@@ -50,7 +50,7 @@ func (s *server) GenerateNIF(ctx context.Context, in *emptypb.Empty) (*pb.NIF, e
 }
 
 func (s *server) GenerateNIFs(ctx context.Context, in *pb.BulkParams) (*pb.NIFs, error) {
-	nifs, err := nifgenerators.GeneratedNIFs(nifgenerators.NIFOptions{Amount: in.GetAmount()})
+	nifs, err := nifgenerators.GenerateNIFs(nifgenerators.NIFOptions{Amount: in.GetAmount()})
 	return &pb.NIFs{NIFs: nifs}, err
 }
 
