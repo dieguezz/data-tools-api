@@ -20,7 +20,7 @@
 			- [ ] Custom
 		- [x] Validators
 		- [x] Dígito de control
-		- [ ] Bulk
+		- [x] Bulk
 	- IBAN / CCC / Credit cards
 		- Generators
 			- [ ] IBAN
