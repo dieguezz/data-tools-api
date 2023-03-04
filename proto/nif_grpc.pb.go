@@ -39,6 +39,7 @@ type NifApiClient interface {
 	// CIF
 	GetCIFControlDigit(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*ControlDigitResponse, error)
 	GenerateCIF(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIF, error)
+	GenerateCIFs(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIFs, error)
 	ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*IsValid, error)
 }
 
@@ -158,6 +159,15 @@ func (c *nifApiClient) GenerateCIF(ctx context.Context, in *BulkParams, opts ...
 	return out, nil
 }
 
+func (c *nifApiClient) GenerateCIFs(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIFs, error) {
+	out := new(CIFs)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GenerateCIFs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *nifApiClient) ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*IsValid, error) {
 	out := new(IsValid)
 	err := c.cc.Invoke(ctx, "/proto.NifApi/ValidateCIF", in, out, opts...)
@@ -187,6 +197,7 @@ type NifApiServer interface {
 	// CIF
 	GetCIFControlDigit(context.Context, *CIF) (*ControlDigitResponse, error)
 	GenerateCIF(context.Context, *BulkParams) (*CIF, error)
+	GenerateCIFs(context.Context, *BulkParams) (*CIFs, error)
 	ValidateCIF(context.Context, *CIF) (*IsValid, error)
 	mustEmbedUnimplementedNifApiServer()
 }
@@ -230,6 +241,9 @@ func (UnimplementedNifApiServer) GetCIFControlDigit(context.Context, *CIF) (*Con
 }
 func (UnimplementedNifApiServer) GenerateCIF(context.Context, *BulkParams) (*CIF, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateCIF not implemented")
+}
+func (UnimplementedNifApiServer) GenerateCIFs(context.Context, *BulkParams) (*CIFs, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateCIFs not implemented")
 }
 func (UnimplementedNifApiServer) ValidateCIF(context.Context, *CIF) (*IsValid, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateCIF not implemented")
@@ -463,6 +477,24 @@ func _NifApi_GenerateCIF_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NifApi_GenerateCIFs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BulkParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GenerateCIFs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GenerateCIFs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GenerateCIFs(ctx, req.(*BulkParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _NifApi_ValidateCIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CIF)
 	if err := dec(in); err != nil {
@@ -535,6 +567,10 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerateCIF",
 			Handler:    _NifApi_GenerateCIF_Handler,
+		},
+		{
+			MethodName: "GenerateCIFs",
+			Handler:    _NifApi_GenerateCIFs_Handler,
 		},
 		{
 			MethodName: "ValidateCIF",

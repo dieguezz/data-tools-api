@@ -84,6 +84,11 @@ func (s *server) GenerateCIF(ctx context.Context, in *pb.BulkParams) (*pb.CIF, e
 	return &pb.CIF{Cif: cif}, nil
 }
 
+func (s *server) GenerateCIFs(ctx context.Context, in *pb.BulkParams) (*pb.CIFs, error) {
+	cifs, err := cifgenerators.GenerateCIFs(int(in.GetAmount()))
+	return &pb.CIFs{CIFs: cifs}, err
+}
+
 func (s *server) ValidateCIF(ctx context.Context, in *pb.CIF) (*pb.IsValid, error) {
 	isValid := cifvalidator.IsValidCIF(in.GetCif())
 	return &pb.IsValid{IsValid: isValid}, nil

@@ -78,6 +78,37 @@
         ]
       }
     },
+    "/cif/generate/bulk": {
+      "get": {
+        "operationId": "NifApi_GenerateCIFs",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoCIFs"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "amount",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
     "/cif/validate/{cif}": {
       "get": {
         "operationId": "NifApi_ValidateCIF",
@@ -404,6 +435,17 @@
       "properties": {
         "cif": {
           "type": "string"
+        }
+      }
+    },
+    "protoCIFs": {
+      "type": "object",
+      "properties": {
+        "CIFs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

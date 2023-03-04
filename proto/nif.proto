@@ -75,6 +75,11 @@ service NifApi {
       get : "/cif/generate"
     };
   };
+  rpc GenerateCIFs(BulkParams) returns (CIFs) {
+    option (google.api.http) = {
+      get : "/cif/generate/bulk"
+    };
+  };
   rpc ValidateCIF(CIF) returns (IsValid) {
     option (google.api.http) = {
       get : "/cif/validate/{cif}"
@@ -89,6 +94,8 @@ message NIFs { repeated string NIFs = 1; }
 message NIEs { repeated string NIEs = 1; }
 
 message CIF { string cif = 1; }
+
+message CIFs { repeated string CIFs = 1; }
 
 message BulkParams { optional int32 amount = 1; }
 
