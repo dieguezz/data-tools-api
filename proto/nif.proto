@@ -85,6 +85,12 @@ service NifApi {
       get : "/cif/validate/{cif}"
     };
   };
+
+  rpc GetAmortization(MortgageAmortizationRequest) returns (MortgageAmortizationResponse) {
+    option (google.api.http) = {
+      get : "/amortization"
+    };
+  };
 }
 
 message NIF { string nif = 1; }
@@ -114,3 +120,35 @@ message TypeResponse { string type = 1; }
 message NIE { string nie = 1; }
 
 message IsValid { bool isValid = 1; }
+
+message MortgageAmortizationRequest {
+  float capital = 1;
+  int32 terms = 2;
+  float interestType = 3;
+  float amortizationAmount = 4;
+  int32 amortizationYear = 5;
+  int32 amortizationMonth = 6;
+}
+
+message Fee {
+  int32 year = 1;
+  int32 month = 2;
+  double price = 3;
+  double price_for_time = 4;
+  double interest = 5;
+  double interest_for_time = 6;
+  double amortization = 7;
+  double amortization_for_time = 8;
+  double pending_capital = 9;
+  double pending_capital_for_time = 10;
+}
+
+message MortgageAmortizationResponse {
+  int32 interestSavingsForPrice = 1;
+  int32 monthlyPrice  = 2;
+  int32 pendingPayments  = 3;
+  int32 timeSavingsMonth = 4;
+  int32 timeSavingsYear = 5;
+  int32 totalTimeInterest = 6;
+  repeated Fee fees = 7;
+}

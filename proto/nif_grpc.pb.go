@@ -41,6 +41,7 @@ type NifApiClient interface {
 	GenerateCIF(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIF, error)
 	GenerateCIFs(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIFs, error)
 	ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*IsValid, error)
+	GetAmortization(ctx context.Context, in *MortgageAmortizationRequest, opts ...grpc.CallOption) (*MortgageAmortizationResponse, error)
 }
 
 type nifApiClient struct {
@@ -177,6 +178,15 @@ func (c *nifApiClient) ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *nifApiClient) GetAmortization(ctx context.Context, in *MortgageAmortizationRequest, opts ...grpc.CallOption) (*MortgageAmortizationResponse, error) {
+	out := new(MortgageAmortizationResponse)
+	err := c.cc.Invoke(ctx, "/proto.NifApi/GetAmortization", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NifApiServer is the server API for NifApi service.
 // All implementations must embed UnimplementedNifApiServer
 // for forward compatibility
@@ -199,6 +209,7 @@ type NifApiServer interface {
 	GenerateCIF(context.Context, *BulkParams) (*CIF, error)
 	GenerateCIFs(context.Context, *BulkParams) (*CIFs, error)
 	ValidateCIF(context.Context, *CIF) (*IsValid, error)
+	GetAmortization(context.Context, *MortgageAmortizationRequest) (*MortgageAmortizationResponse, error)
 	mustEmbedUnimplementedNifApiServer()
 }
 
@@ -247,6 +258,9 @@ func (UnimplementedNifApiServer) GenerateCIFs(context.Context, *BulkParams) (*CI
 }
 func (UnimplementedNifApiServer) ValidateCIF(context.Context, *CIF) (*IsValid, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateCIF not implemented")
+}
+func (UnimplementedNifApiServer) GetAmortization(context.Context, *MortgageAmortizationRequest) (*MortgageAmortizationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAmortization not implemented")
 }
 func (UnimplementedNifApiServer) mustEmbedUnimplementedNifApiServer() {}
 
@@ -513,6 +527,24 @@ func _NifApi_ValidateCIF_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NifApi_GetAmortization_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MortgageAmortizationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NifApiServer).GetAmortization(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.NifApi/GetAmortization",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NifApiServer).GetAmortization(ctx, req.(*MortgageAmortizationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NifApi_ServiceDesc is the grpc.ServiceDesc for NifApi service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -575,6 +607,10 @@ var NifApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ValidateCIF",
 			Handler:    _NifApi_ValidateCIF_Handler,
+		},
+		{
+			MethodName: "GetAmortization",
+			Handler:    _NifApi_GetAmortization_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

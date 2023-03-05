@@ -16,6 +16,72 @@
     "application/json"
   ],
   "paths": {
+    "/amortization": {
+      "get": {
+        "operationId": "NifApi_GetAmortization",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoMortgageAmortizationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "capital",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "terms",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "interestType",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "amortizationAmount",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "amortizationYear",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "amortizationMonth",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "NifApi"
+        ]
+      }
+    },
     "/cif/controldigit/{cif}": {
       "get": {
         "summary": "CIF",
@@ -457,11 +523,91 @@
         }
       }
     },
+    "protoFee": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "priceForTime": {
+          "type": "number",
+          "format": "double"
+        },
+        "interest": {
+          "type": "number",
+          "format": "double"
+        },
+        "interestForTime": {
+          "type": "number",
+          "format": "double"
+        },
+        "amortization": {
+          "type": "number",
+          "format": "double"
+        },
+        "amortizationForTime": {
+          "type": "number",
+          "format": "double"
+        },
+        "pendingCapital": {
+          "type": "number",
+          "format": "double"
+        },
+        "pendingCapitalForTime": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
     "protoIsValid": {
       "type": "object",
       "properties": {
         "isValid": {
           "type": "boolean"
+        }
+      }
+    },
+    "protoMortgageAmortizationResponse": {
+      "type": "object",
+      "properties": {
+        "interestSavingsForPrice": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "monthlyPrice": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pendingPayments": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "timeSavingsMonth": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "timeSavingsYear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalTimeInterest": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fees": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoFee"
+          }
         }
       }
     },

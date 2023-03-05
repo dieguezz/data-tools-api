@@ -124,8 +124,8 @@
 	- [ ] Bastidor 
 - Mmortgage
     - Calculations
-    - [ ] Interest savings
-    - [ ] Monthly price
-    - [ ] Time savings by Month
-    - [ ] Time savings by Year
-    - [ ] Total time interest
+    - [x] Interest savings
+    - [x] Monthly price
+    - [x] Time savings by Month
+    - [x] Time savings by Year
+    - [x] Total time interest

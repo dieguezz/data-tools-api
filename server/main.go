@@ -10,6 +10,7 @@ import (
 	cifvalidator "github.com/dieguezz/nif-tools/pkg/cif/validators"
 	documentparser "github.com/dieguezz/nif-tools/pkg/document/parser"
 	documentvalidator "github.com/dieguezz/nif-tools/pkg/document/validators"
+	amortizations "github.com/dieguezz/nif-tools/pkg/mortgage"
 	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
 	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
 	nifgenerators "github.com/dieguezz/nif-tools/pkg/nif/generators"
@@ -24,6 +25,7 @@ type server struct {
 	pb.UnimplementedNifApiServer
 }
 
+// NIF
 func (s *server) GetNIFControlDigit(ctx context.Context, in *pb.NIF) (*pb.ControlDigitResponse, error) {
 	nif, err := documentparser.GetParsedDocument(in.GetNif())
 	return &pb.ControlDigitResponse{ControlDigit: nif.Control}, err
@@ -59,6 +61,7 @@ func (s *server) ValidateNIF(ctx context.Context, in *pb.NIF) (*pb.IsValid, erro
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
+// NIE
 func (s *server) GenerateNIE(ctx context.Context, in *emptypb.Empty) (*pb.NIE, error) {
 	nie := niegenerators.GenerateNIE()
 	return &pb.NIE{Nie: nie}, nil
@@ -74,6 +77,7 @@ func (s *server) ValidateNIE(ctx context.Context, in *pb.NIE) (*pb.IsValid, erro
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
+// CIF
 func (s *server) GetCIFControlDigit(ctx context.Context, in *pb.CIF) (*pb.ControlDigitResponse, error) {
 	cif, err := documentparser.GetParsedDocument(in.GetCif())
 	return &pb.ControlDigitResponse{ControlDigit: cif.Control}, err
@@ -92,6 +96,49 @@ func (s *server) GenerateCIFs(ctx context.Context, in *pb.BulkParams) (*pb.CIFs,
 func (s *server) ValidateCIF(ctx context.Context, in *pb.CIF) (*pb.IsValid, error) {
 	isValid := cifvalidator.IsValidCIF(in.GetCif())
 	return &pb.IsValid{IsValid: isValid}, nil
+}
+
+func (s *server) GetAmortization(ctx context.Context, in *pb.MortgageAmortizationRequest) (*pb.MortgageAmortizationResponse, error) {
+	interestSavingsForPrice,
+		monthlyPrice,
+		pendingPayments,
+		timeSavingsYear,
+		timeSavingsMonth,
+		totalTimeInterest,
+
+		fees := amortizations.CalcMortgageAmortization(
+		float64(in.GetCapital()),
+		int(in.GetTerms()),
+		float64(in.GetInterestType()),
+		float64(in.GetAmortizationAmount()),
+		int(in.GetAmortizationYear()),
+		int(in.GetAmortizationMonth()))
+
+	var mappedFees []*pb.Fee
+	for _, fee := range fees {
+		mapped := pb.Fee{}
+		mapped.Year = int32(fee.Year)
+		mapped.Amortization = fee.Amortization
+		mapped.AmortizationForTime = fee.AmortizationFortime
+		mapped.Interest = fee.Interest
+		mapped.InterestForTime = fee.InterestForTime
+		mapped.Month = int32(fee.Month)
+		mapped.PendingCapital = fee.PendingCapital
+		mapped.PendingCapitalForTime = fee.PendingCapitalForTime
+		mapped.Price = fee.Price
+		mappedFees = append(mappedFees, &mapped)
+	}
+
+	return &pb.MortgageAmortizationResponse{
+			Fees:                    mappedFees,
+			MonthlyPrice:            int32(monthlyPrice),
+			PendingPayments:         int32(pendingPayments),
+			TimeSavingsYear:         int32(timeSavingsYear),
+			TimeSavingsMonth:        int32(timeSavingsMonth),
+			TotalTimeInterest:       int32(totalTimeInterest),
+			InterestSavingsForPrice: int32(interestSavingsForPrice),
+		},
+		nil
 }
 
 func main() {
