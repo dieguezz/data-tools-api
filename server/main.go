@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"image"
 	"log"
 	"net"
 	"net/http"
@@ -122,14 +123,20 @@ func ResizeImage(w http.ResponseWriter, req *http.Request, pathParams map[string
 		return
 	}
 
-	resized, err := images.ResizeImage(file, width, height, quality)
+	_, format, err := image.DecodeConfig(file)
+	if err != nil {
+		http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+		return
+	}
+
+	resized, err := images.ResizeImage(file, format, width, height, quality)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "image/jpeg")
+	w.Header().Set("Content-Type", fmt.Sprintf("image/%s", format))
 
 	w.Write(resized.Bytes())
 }

@@ -103,16 +103,15 @@
 		- [ ] JPG a WebP
 		- [ ] PNG a WebP
 		- [ ] ...
-	- [ ] Resize
+	- [x] Resize
 	- [ ] Crop
-	- [ ] Thumbnails
 - Phones
 	- IMEI
 		- [ ] Generator
 		- [ ] Validators
 	- Generators
 		- [ ] Fijo
-		- [ ] Por provinciasç
+		- [ ] Por provincias
 		- [ ] Internacional
 		- [ ] Interncional custom
 		- [ ] Teléfono móvil
