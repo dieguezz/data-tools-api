@@ -41,6 +41,7 @@ type NifApiClient interface {
 	GenerateCIF(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIF, error)
 	GenerateCIFs(ctx context.Context, in *BulkParams, opts ...grpc.CallOption) (*CIFs, error)
 	ValidateCIF(ctx context.Context, in *CIF, opts ...grpc.CallOption) (*IsValid, error)
+	// Mortgage
 	GetAmortization(ctx context.Context, in *MortgageAmortizationRequest, opts ...grpc.CallOption) (*MortgageAmortizationResponse, error)
 }
 
@@ -209,6 +210,7 @@ type NifApiServer interface {
 	GenerateCIF(context.Context, *BulkParams) (*CIF, error)
 	GenerateCIFs(context.Context, *BulkParams) (*CIFs, error)
 	ValidateCIF(context.Context, *CIF) (*IsValid, error)
+	// Mortgage
 	GetAmortization(context.Context, *MortgageAmortizationRequest) (*MortgageAmortizationResponse, error)
 	mustEmbedUnimplementedNifApiServer()
 }

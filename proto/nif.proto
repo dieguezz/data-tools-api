@@ -86,11 +86,14 @@ service NifApi {
     };
   };
 
-  rpc GetAmortization(MortgageAmortizationRequest) returns (MortgageAmortizationResponse) {
+  // Mortgage
+  rpc GetAmortization(MortgageAmortizationRequest)
+      returns (MortgageAmortizationResponse) {
     option (google.api.http) = {
       get : "/amortization"
     };
   };
+
 }
 
 message NIF { string nif = 1; }
@@ -145,8 +148,8 @@ message Fee {
 
 message MortgageAmortizationResponse {
   int32 interestSavingsForPrice = 1;
-  int32 monthlyPrice  = 2;
-  int32 pendingPayments  = 3;
+  int32 monthlyPrice = 2;
+  int32 pendingPayments = 3;
   int32 timeSavingsMonth = 4;
   int32 timeSavingsYear = 5;
   int32 totalTimeInterest = 6;

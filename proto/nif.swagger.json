@@ -18,6 +18,7 @@
   "paths": {
     "/amortization": {
       "get": {
+        "summary": "Mortgage",
         "operationId": "NifApi_GetAmortization",
         "responses": {
           "200": {
