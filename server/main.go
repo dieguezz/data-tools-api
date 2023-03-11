@@ -1,7 +1,8 @@
-package main
+package server
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	cifvalidator "github.com/dieguezz/nif-tools/pkg/cif/validators"
 	documentparser "github.com/dieguezz/nif-tools/pkg/document/parser"
 	documentvalidator "github.com/dieguezz/nif-tools/pkg/document/validators"
+	images "github.com/dieguezz/nif-tools/pkg/images"
 	amortizations "github.com/dieguezz/nif-tools/pkg/mortgage"
 	niegenerators "github.com/dieguezz/nif-tools/pkg/nie/generators"
 	nievalidator "github.com/dieguezz/nif-tools/pkg/nie/validators"
@@ -98,50 +100,41 @@ func (s *server) ValidateCIF(ctx context.Context, in *pb.CIF) (*pb.IsValid, erro
 	return &pb.IsValid{IsValid: isValid}, nil
 }
 
+// Mortgage
 func (s *server) GetAmortization(ctx context.Context, in *pb.MortgageAmortizationRequest) (*pb.MortgageAmortizationResponse, error) {
-	interestSavingsForPrice,
-		monthlyPrice,
-		pendingPayments,
-		timeSavingsYear,
-		timeSavingsMonth,
-		totalTimeInterest,
 
-		fees := amortizations.CalcMortgageAmortization(
-		float64(in.GetCapital()),
-		int(in.GetTerms()),
-		float64(in.GetInterestType()),
-		float64(in.GetAmortizationAmount()),
-		int(in.GetAmortizationYear()),
-		int(in.GetAmortizationMonth()))
-
-	var mappedFees []*pb.Fee
-	for _, fee := range fees {
-		mapped := pb.Fee{}
-		mapped.Year = int32(fee.Year)
-		mapped.Amortization = fee.Amortization
-		mapped.AmortizationForTime = fee.AmortizationFortime
-		mapped.Interest = fee.Interest
-		mapped.InterestForTime = fee.InterestForTime
-		mapped.Month = int32(fee.Month)
-		mapped.PendingCapital = fee.PendingCapital
-		mapped.PendingCapitalForTime = fee.PendingCapitalForTime
-		mapped.Price = fee.Price
-		mappedFees = append(mappedFees, &mapped)
-	}
-
-	return &pb.MortgageAmortizationResponse{
-			Fees:                    mappedFees,
-			MonthlyPrice:            int32(monthlyPrice),
-			PendingPayments:         int32(pendingPayments),
-			TimeSavingsYear:         int32(timeSavingsYear),
-			TimeSavingsMonth:        int32(timeSavingsMonth),
-			TotalTimeInterest:       int32(totalTimeInterest),
-			InterestSavingsForPrice: int32(interestSavingsForPrice),
-		},
+	return amortizations.MapToAmortizations(
+			float64(in.GetCapital()),
+			int(in.GetTerms()),
+			float64(in.GetInterestType()),
+			float64(in.GetAmortizationAmount()),
+			int(in.GetAmortizationYear()),
+			int(in.GetAmortizationMonth())),
 		nil
 }
 
-func main() {
+// Images
+func ResizeImage(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+
+	file, width, height, quality, err := images.GetResizeParams(req)
+	if err != nil {
+		http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+		return
+	}
+
+	resized, err := images.ResizeImage(file, width, height, quality)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "image/jpeg")
+
+	w.Write(resized.Bytes())
+}
+
+func Serve() {
 	// Grpc server
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
@@ -151,6 +144,10 @@ func main() {
 
 	go func() {
 		mux := runtime.NewServeMux()
+		err := mux.HandlePath("POST", "/upload", ResizeImage)
+		if err != nil {
+			panic(err)
+		}
 		pb.RegisterNifApiHandlerServer(context.Background(), mux, &server{})
 		// Rest server
 		log.Fatalln(http.ListenAndServe("localhost:8080", mux))
