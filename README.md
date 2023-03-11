@@ -96,7 +96,7 @@
 	- [ ] Generator
 	- [ ] Validators de seguridad
 - Images
-	- Optimizadores
+	- Optimizers
 		- [ ] PNG
 		- [ ] JPG
 	- Converters
@@ -105,6 +105,7 @@
 		- [ ] ...
 	- [ ] Resize
 	- [ ] Crop
+	- [ ] Thumbnails
 - Phones
 	- IMEI
 		- [ ] Generator
